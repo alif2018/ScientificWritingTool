@@ -3,235 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Formatter - Title Case Converter</title>
+    <title>Indonesian Title Formatter</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
+        :root { 
+            --primary: #4f46e5; 
+            --primary-hover: #4338ca;
+            --bg: #f1f5f9; 
+            --text: #1e293b; 
+            --card: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        body { 
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            padding: 40px 20px; 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh;
             margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
         }
-        .container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 800px;
+
+        .container { 
+            background: var(--card); 
+            padding: 40px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
+            width: 100%; 
+            max-width: 850px; 
+            transition: transform 0.3s ease;
         }
-        h1 {
-            color: #2c3e50;
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
+
+        h1 { 
+            font-size: 30px; 
+            font-weight: 800; 
+            text-align: center; 
+            color: var(--text); 
+            margin-bottom: 32px; 
+            letter-spacing: -1px;
+            background: linear-gradient(to right, var(--primary), #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .input-group, .output-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #34495e;
-        }
-        textarea {
-            width: 100%;
-            height: 150px;
-            padding: 12px;
-            border: 2px solid #dfe6e9;
-            border-radius: 8px;
-            resize: vertical;
-            font-size: 16px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-        textarea:focus {
-            outline: none;
-            border-color: #3498db;
-        }
-        button.btn-process {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            width: 100%;
-            margin-bottom: 15px;
-            background-color: Transparent;
-            background-repeat:no-repeat;
-            overflow: hidden;
-        }
-        button.btn-process:hover {
-            background-color: #2980b9;
-        }
-        .result-container {
-            position: relative;
-            background-color: #f9f9f9;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            min-height: 100px;
-        }
-        .result-box {
-            padding: 15px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: inherit;
-            color: #2c3e50;
-            font-size: 16px;
-        }
-        .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: Transparent;
-            border: 1px solid #dfe6e9;
-            border-radius: 4px;
-            padding: 5px 8px;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: all 0.2s;
+
+        label { 
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 12px;
-            color: #7f8c8d;
-            z-index: 10;
-            outline: none;
+            font-size: 14px; 
+            font-weight: 700; 
+            margin-bottom: 12px; 
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .copy-btn:hover {
-            background-color: #f4f7f6;
-            border-color: #3498db;
-            color: #3498db;
-        }
-        .copy-btn svg {
-            width: 16px;
+
+        label::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
             height: 16px;
-            fill: currentColor;
+            background: var(--primary);
+            margin-right: 8px;
+            border-radius: 2px;
         }
-        .toast {
-            visibility: hidden;
-            min-width: 150px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 4px;
-            padding: 8px;
-            position: fixed;
-            z-index: 100;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 14px;
+
+        textarea { 
+            width: 100%; 
+            height: 180px; 
+            padding: 20px; 
+            border: 2px solid var(--border); 
+            border-radius: 16px; 
+            font-size: 16px; 
+            box-sizing: border-box; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            line-height: 1.6; 
+            resize: none;
+            background: #fcfcfc;
+            color: var(--text);
         }
-        .toast.show {
-            visibility: visible;
-            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+
+        textarea:focus { 
+            outline: none; 
+            border-color: var(--primary); 
+            background: white;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); 
         }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+        .btn-process { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 18px; 
+            border-radius: 14px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: 700; 
+            width: 100%; 
+            margin: 28px 0; 
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+        }
+
+        .btn-process:hover { 
+            background: var(--primary-hover); 
+            transform: translateY(-2px); 
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3); 
+        }
+
+        .btn-process:active {
+            transform: translateY(0);
+        }
+
+        .result-container { 
+            position: relative; 
+            background: #f8fafc; 
+            border: 2px solid var(--border); 
+            border-radius: 16px; 
+            min-height: 120px; 
+            transition: border-color 0.3s ease;
+        }
+
+        .result-container:hover {
+            border-color: #cbd5e1;
+        }
+
+        .result-box { 
+            padding: 24px; 
+            padding-bottom: 75px; 
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+            font-size: 17px; 
+            line-height: 1.8; 
+            color: #0f172a;
+            font-weight: 500;
+        }
+
+        .copy-btn { 
+            position: absolute; 
+            bottom: 16px; 
+            right: 16px; 
+            background: white; 
+            border: 1px solid var(--border); 
+            border-radius: 10px; 
+            padding: 10px 20px; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            font-size: 14px; 
+            font-weight: 600; 
+            color: #475569; 
+            transition: all 0.2s; 
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .copy-btn:hover { 
+            border-color: var(--primary); 
+            color: var(--primary); 
+            background: #fdfdfd;
+            transform: scale(1.02);
+        }
+
+        .copy-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+        .toast { 
+            visibility: hidden; 
+            background: #1e293b; 
+            color: white; 
+            padding: 14px 28px; 
+            position: fixed; 
+            bottom: 40px; 
+            left: 50%; 
+            transform: translateX(-50%) translateY(20px); 
+            border-radius: 50px; 
+            font-size: 14px; 
+            font-weight: 600; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+            z-index: 100; 
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .toast.show { 
+            visibility: visible; 
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 24px; }
+            h1 { font-size: 24px; }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Judul Formatter (Indonesian Title Case)</h1>
+    <h1>Indonesian Title Formatter</h1>
     
-    <div class="input-group">
-        <label for="inputText">Masukkan Teks:</label>
-        <textarea id="inputText" placeholder="Contoh: MENGGAGAS DISAIN PENELITIAN QUR'AN-HADIS TEMATIK"></textarea>
-    </div>
+    <label>Tulis Judul:</label>
+    <textarea id="inputText" placeholder="Tulis atau tempel judul di sini ..."></textarea>
 
-    <button class="btn-process" onclick="processText()">Format Teks</button>
+    <button class="btn-process" onclick="processText()">Jalankan Formatter</button>
 
-    <div class="output-group">
-        <label>Hasil:</label>
-        <div class="result-container">
-            <button class="copy-btn" onclick="copyToClipboard()" title="Salin ke Clipboard">
-                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-            </button>
-            <div id="outputText" class="result-box"></div>
-        </div>
+    <label>Hasil Format:</label>
+    <div class="result-container">
+        <div id="outputText" class="result-box"></div>
+        <button class="copy-btn" id="btnCopy" onclick="copyToClipboard()" style="display: none;">
+            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            Salin
+        </button>
     </div>
 </div>
 
-<div id="toast" class="toast">Teks disalin!</div>
+<div id="toast" class="toast">Teks bersih berhasil disalin!</div>
 
 <script>
 function processText() {
     const input = document.getElementById('inputText').value;
-    if (!input) {
-        document.getElementById('outputText').innerText = "";
+    const outDiv = document.getElementById('outputText');
+    const btnCopy = document.getElementById('btnCopy');
+
+    if (!input.trim()) {
+        outDiv.innerText = "";
+        btnCopy.style.display = "none";
         return;
     }
 
-    const lines = input.split('\n');
-    const formattedLines = lines.map(line => {
-        if (!line.trim()) return "";
+    // 1. STERILISASI EKSTRIM (Deep Cleaning)
+    let teks = input
+        .replace(/[\r\n\t]+/g, " ")      // Ganti new line dan tab dengan spasi
+        .replace(/\xa0/g, " ")           // Ganti non-breaking space
+        .replace(/\s\s+/g, " ")          // Hapus spasi ganda/berlebih
+        .trim();                         // Hapus spasi di ujung awal & akhir
 
-        let teks = line.replace(/\s+/g, " ").trim();
-        const isFullCap = teks === teks.toUpperCase();
-        const isConsecutive3 = /\b[A-Z]{2,}\b\s+\b[A-Z]{2,}\b\s+\b[A-Z]{2,}\b/.test(teks);
+    // 2. DETEKSI MODE KAPITAL
+    const isFullCap = teks === teks.toUpperCase();
 
-        const preposisi = [
-            "Akan", "Atas", "Atau", "Bagi", "Bak", "Bahwa", "Buat", "Dalam", "Dan", "Dari", 
-            "Daripada", "Demi", "Dengan", "Di", "Hingga", "Ia", "In", "Jika", "Kalau", 
-            "Karena", "Ke", "Kecuali", "Kepada", "Lalu", "Lewat", "Maka", "Melalui", 
-            "Mengenai", "Oleh", "Pada", "Per", "Sebab", "Sebagai", "Sebagaimana", 
-            "Sebanyak", "Sejak", "Selama", "Sambil", "Sampai", "Serta", "Semenjak", 
-            "Seperti", "Sesuai", "Setelah", "Tentang", "Terhadap", "Tetapi", "Tiap", 
-            "Untuk", "Via", "Yaitu", "Yang"
-        ];
+    // 3. DAFTAR KATA TUGAS FINAL (EYD V)
+    const preposisi = [
+        "akan", "andai", "atas", "atau", "bagi", "bak", "bahwa", "buat", "dalam", "dan", "dari", 
+        "daripada", "demi", "dengan", "di", "hingga", "ia", "in", "jika", "kalau", 
+        "karena", "ke", "kecuali", "kepada", "lalu", "lewat", "maka", "melalui", 
+        "mengenai", "nan", "oleh", "pada", "per", "pun", "sebab", "sebagai", "sebagaimana", 
+        "sebanyak", "sejak", "selama", "sambil", "sampai", "seraya", "serta", "semenjak", 
+        "seperti", "sesuai", "setelah", "tatkala", "tentang", "terhadap", "tetapi", "tiap", 
+        "untuk", "via", "yaitu", "yang", "walau", "walaupun"
+    ];
 
-        let res = teks.toLowerCase().split(' ').map(word => {
-            return word.charAt(0).toUpperCase() + word.slice(1);
-        }).join(' ');
+    // 4. FORMAT PROPER CASE AWAL
+    let words = teks.toLowerCase().split(' ');
+    let res = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
-        preposisi.forEach(k => {
-            const regex = new RegExp(" \\b" + k + "\\b", "gi");
-            res = res.replace(regex, " " + k.toLowerCase());
-        });
-
-        if (!(isFullCap || isConsecutive3)) {
-            const originalWords = teks.split(' ');
-            const currentWords = res.split(' ');
-            res = currentWords.map((word, index) => {
-                const orig = originalWords[index];
-                if (orig && orig === orig.toUpperCase() && !/^[0-9\W]+$/.test(orig)) return orig;
-                return word;
-            }).join(' ');
-        }
-
-        res = res.replace(/\b([^aeiouAEIOU\s\d\W]{2,5})\b/g, (match) => match.toUpperCase());
-
-        // LOGIKA BARU:
-        // 1. Semua huruf setelah tanda hubung menjadi Kapital (contoh: Undang-Undang)
-        res = res.replace(/-([a-z])/g, (match, p1) => "-" + p1.toUpperCase());
-        
-        // 2. Khusus awalan al- tetap dipaksa kecil (contoh: al-Khairiyah)
-        res = res.replace(/\bAl-/gi, "al-");
-
-        // Huruf kecil setelah tanda petik
-        res = res.replace(/(['’])([A-Z])/g, (match, p1, p2) => p1 + p2.toLowerCase());
-
-        return res.trim();
+    // 5. PENYEMPURNAAN KATA TUGAS (Force Lowercase)
+    preposisi.forEach(k => {
+        // Regex 'gi' + spasi di depan menjamin hanya kata di tengah yang dikecilkan
+        const regex = new RegExp(" \\b" + k + "\\b", "gi");
+        res = res.replace(regex, " " + k.toLowerCase());
     });
 
-    document.getElementById('outputText').innerText = formattedLines.join('\n');
+    // 6. PROTEKSI SINGKATAN & GELAR
+    if (!isFullCap) {
+        const originalWords = teks.split(' ');
+        const currentWords = res.split(' ');
+        res = currentWords.map((word, index) => {
+            const orig = originalWords[index];
+            if (orig && orig.length > 1 && orig === orig.toUpperCase() && !/[0-9]/.test(orig)) {
+                return orig;
+            }
+            return word;
+        }).join(' ');
+    }
+
+    // 7. SENTUHAN AKHIR (RegEx Sakti)
+    res = res.replace(/\b([^aeiouAEIOU\s\d\W]{2,5})\b/g, m => m.toUpperCase()); // Akronim konsonan
+    res = res.replace(/-([a-z])/g, (m, p1) => "-" + p1.toUpperCase());           // Pasca-Hubung
+    res = res.replace(/\bAl-/gi, "al-");                                         // Partikel al-
+    res = res.replace(/(['’])([A-Z])/g, (m, p1, p2) => p1 + p2.toLowerCase());   // Pasca-Petik
+
+    // 8. STERILISASI AKHIR (Hapus spasi sebelum tanda baca jika ada kesalahan input)
+    res = res.replace(/\s([?.!,;])/g, "$1");
+
+    outDiv.innerText = res;
+    btnCopy.style.display = "flex";
 }
 
 function copyToClipboard() {
     const text = document.getElementById('outputText').innerText;
-    if (!text) return;
     navigator.clipboard.writeText(text).then(() => {
         const toast = document.getElementById("toast");
         toast.className = "toast show";
-        setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        setTimeout(() => { toast.className = "toast"; }, 2500);
     });
 }
 </script>

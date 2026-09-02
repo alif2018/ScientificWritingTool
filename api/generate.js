@@ -18,13 +18,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Data tidak lengkap' });
   }
 
-  // Ambil API Key dari Environment Variables Vercel (NAMA HARUS: GEMINI_API_KEY)
   const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
   if (!GEMINI_API_KEY) {
     return res.status(500).json({ error: 'Server missing Gemini API key' });
   }
 
-  // ---- PROMPT SISTEM ----
   const systemPrompt = `
 Anda adalah Asisten Ahli Kurikulum OBE. 
 Tugas: Generate RPS lengkap dalam format Markdown dengan 8 Komponen:
@@ -43,7 +41,6 @@ Aturan mutlak:
 - Jangan tanyakan hal lain ke user. Langsung berikan output Markdown.
 `;
 
-  // ---- PROMPT USER ----
   const userPrompt = `
 Nama Mata Kuliah: ${mk}
 Program Studi: ${prodi}
@@ -55,9 +52,9 @@ Instruksi: Segera hasilkan RPS OBE lengkap dalam 1 blok markdown. Patuhi semua a
 `;
 
   try {
-    // ===== PANGGIL API GEMINI (Model: gemini-pro) =====
+    // ===== PANGGIL API GEMINI DENGAN MODEL gemini-2.5-flash =====
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -79,13 +76,11 @@ Instruksi: Segera hasilkan RPS OBE lengkap dalam 1 blok markdown. Patuhi semua a
 
     const data = await response.json();
     
-    // Cek error dari Google
     if (data.error) {
       console.error('Gemini Error:', data.error);
       return res.status(500).json({ error: data.error.message || 'Gagal memanggil Gemini' });
     }
 
-    // Ambil teks hasil
     const markdownResult = data.candidates[0].content.parts[0].text;
     return res.status(200).json({ markdown: markdownResult });
 

@@ -18,15 +18,14 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Data tidak lengkap' });
   }
 
-  // Ambil API Key dari Environment Variables Vercel
-  const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
-  if (!DEEPSEEK_API_KEY) {
-    return res.status(500).json({ error: 'Server missing DeepSeek API key' });
-  }
+  // =============================================================
+  // 1. TENTUKAN PROVIDER BERDASARKAN ENV
+  // =============================================================
+  const provider = process.env.AI_PROVIDER || 'gemini'; // default: gemini
 
-  // ============================================================
-  // PROMPT SISTEM – SAMA SEPERTI SEBELUMNYA (ATURAN RPS)
-  // ============================================================
+  // =============================================================
+  // 2. PROMPT SISTEM (SAMA UNTUK SEMUA PROVIDER)
+  // =============================================================
   const systemPrompt = `
 Anda adalah Asisten Ahli Kurikulum OBE yang sangat berpengalaman.
 
@@ -61,9 +60,9 @@ Tugas Anda: Hasilkan RPS (Rencana Pembelajaran Semester) yang **sangat komprehen
 - **Panjang output:** Harus sangat detail dan komprehensif, setara dengan RPS yang siap pakai untuk dokumen akreditasi. Gunakan seluruh ruang yang tersedia.
 `;
 
-  // ============================================================
-  // PROMPT USER – berisi data dari form
-  // ============================================================
+  // =============================================================
+  // 3. PROMPT USER
+  // =============================================================
   const userPrompt = `
 Nama Mata Kuliah: ${mk}
 Program Studi: ${prodi}
@@ -74,37 +73,86 @@ ${topics.map((t, i) => `${i+1}. ${t}`).join('\n')}
 Instruksi: Hasilkan RPS OBE yang sangat lengkap dan detail sesuai panduan di atas. Gunakan daftar topik sebagai acuan untuk menyusun 13 pertemuan efektif. Jangan ragu untuk menambahkan subtopik atau sesi pengayaan jika diperlukan.
 `;
 
+  // =============================================================
+  // 4. EKSEKUSI BERDASARKAN PROVIDER
+  // =============================================================
   try {
-    // ============================================================
-    // PANGGIL DEEPSEEK API (model terbaik)
-    // ============================================================
-    const response = await fetch('https://api.deepseek.com/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'deepseek-v4-pro',  // atau 'deepseek-v4-flash' jika lebih cepat
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
-        ],
-        temperature: 0.3,
-        max_tokens: 8192  // output panjang & detail
-      })
-    });
+    let result;
 
-    const data = await response.json();
-    
-    if (data.error) {
-      console.error('DeepSeek Error:', data.error);
-      return res.status(500).json({ error: data.error.message || 'Gagal memanggil DeepSeek' });
+    if (provider === 'deepseek') {
+      // ---------- DEEPSEEK ----------
+      const apiKey = process.env.DEEPSEEK_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: 'DEEPSEEK_API_KEY tidak ditemukan di environment variables.' });
+      }
+
+      const response = await fetch('https://api.deepseek.com/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'deepseek-v4-pro', // atau 'deepseek-v4-flash' (lebih murah)
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt }
+          ],
+          temperature: 0.3,
+          max_tokens: 8192
+        })
+      });
+
+      const data = await response.json();
+      if (data.error) {
+        console.error('DeepSeek Error:', data.error);
+        if (data.error.message && data.error.message.includes('Insufficient Balance')) {
+          return res.status(402).json({ error: '⚠️ Saldo DeepSeek habis. Silakan top-up atau ganti provider ke Gemini (set AI_PROVIDER=gemini).' });
+        }
+        return res.status(500).json({ error: data.error.message || 'Gagal memanggil DeepSeek' });
+      }
+      result = data.choices[0].message.content;
+
+    } else if (provider === 'gemini') {
+      // ---------- GEMINI ----------
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: 'GEMINI_API_KEY tidak ditemukan di environment variables.' });
+      }
+
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [
+              {
+                parts: [
+                  { text: `${systemPrompt}\n\n---\n\n${userPrompt}` }
+                ]
+              }
+            ],
+            generationConfig: {
+              temperature: 0.3,
+              maxOutputTokens: 8192
+            }
+          })
+        }
+      );
+
+      const data = await response.json();
+      if (data.error) {
+        console.error('Gemini Error:', data.error);
+        return res.status(500).json({ error: data.error.message || 'Gagal memanggil Gemini' });
+      }
+      result = data.candidates[0].content.parts[0].text;
+
+    } else {
+      return res.status(400).json({ error: `Provider "${provider}" tidak dikenali. Gunakan "gemini" atau "deepseek".` });
     }
 
-    // Ambil teks hasil dari response DeepSeek
-    const markdownResult = data.choices[0].message.content;
-    return res.status(200).json({ markdown: markdownResult });
+    return res.status(200).json({ markdown: result });
 
   } catch (error) {
     console.error('Server Error:', error);

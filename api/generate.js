@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  // CORS untuk keamanan
+  // CORS
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   
@@ -18,9 +18,10 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Data tidak lengkap' });
   }
 
-  const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-  if (!OPENAI_API_KEY) {
-    return res.status(500).json({ error: 'Server missing API key' });
+  // Ambil API Key dari Environment Variables Vercel
+  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+  if (!GEMINI_API_KEY) {
+    return res.status(500).json({ error: 'Server missing Gemini API key' });
   }
 
   // ---- PROMPT SISTEM (ATURAN RPS) ----
@@ -54,31 +55,38 @@ Instruksi: Segera hasilkan RPS OBE lengkap dalam 1 blok markdown. Patuhi semua a
 `;
 
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'gpt-3.5-turbo', // Ganti ke gpt-4 jika mau lebih bagus, tapi lebih lama
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
-        ],
-        temperature: 0.3,
-        max_tokens: 4000
-      })
-    });
+    // ===== PANGGIL API GEMINI =====
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: {
+            parts: [{ text: systemPrompt }]
+          },
+          contents: [
+            {
+              parts: [{ text: userPrompt }]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.3,
+            maxOutputTokens: 4000
+          }
+        })
+      }
+    );
 
     const data = await response.json();
     
     if (data.error) {
-      console.error('OpenAI Error:', data.error);
-      return res.status(500).json({ error: data.error.message || 'Gagal memanggil AI' });
+      console.error('Gemini Error:', data.error);
+      return res.status(500).json({ error: data.error.message || 'Gagal memanggil Gemini' });
     }
 
-    const markdownResult = data.choices[0].message.content;
+    // Ambil teks hasil dari response Gemini
+    const markdownResult = data.candidates[0].content.parts[0].text;
     return res.status(200).json({ markdown: markdownResult });
 
   } catch (error) {

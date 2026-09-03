@@ -163,7 +163,7 @@
             transform: scale(0.96);
         }
 
-        /* Warna khusus tombol */
+        /* Warna khusus tombol (urutan: Tempel, Bersihkan, Salin, Tinjau, Unduh) */
         .btn-paste {
             background: #e3eefa;
             color: #0d2f5a;
@@ -214,7 +214,7 @@
             min-width: 100px;
         }
 
-        /* PREVIEW */
+        /* ===== PREVIEW LEBAR & SPASI ===== */
         .preview-area {
             margin-top: 18px;
             border: 2px dashed #b8cce0;
@@ -222,6 +222,7 @@
             padding: 18px 20px;
             background: #f9fcff;
             display: none;
+            width: 100%;
         }
         .preview-area.visible {
             display: block;
@@ -236,28 +237,99 @@
             color: #1a3c6e;
             margin-bottom: 12px;
         }
+
         .preview-box {
             background: white;
-            padding: 20px 24px;
+            padding: 24px 30px;
             border-radius: 12px;
             border: 1px solid #dde4ed;
             overflow-x: auto;
-            max-height: 520px;
+            max-height: 550px;
             overflow-y: auto;
+            width: 100%;
+            font-family: 'Aptos', 'Segoe UI', Arial, sans-serif;
+            font-size: 9pt;
+            line-height: 1.6;
+            color: #1e2a3a;
+        }
+
+        .preview-box h1,
+        .preview-box h2,
+        .preview-box h3,
+        .preview-box h4,
+        .preview-box p,
+        .preview-box ul,
+        .preview-box ol,
+        .preview-box table,
+        .preview-box blockquote {
+            margin-top: 0.4em;
+            margin-bottom: 0.5em;
+        }
+
+        .preview-box h1 {
+            font-size: 16pt;
+            color: #1a3c6e;
+        }
+        .preview-box h2 {
+            font-size: 13pt;
+            color: #2a4c7e;
+            border-bottom: 1px solid #d0d8e4;
+            padding-bottom: 4px;
+        }
+        .preview-box h3 {
+            font-size: 11pt;
+            font-weight: 700;
+        }
+
+        .preview-box ul,
+        .preview-box ol {
+            padding-left: 24px;
+            margin-bottom: 0.5em;
+        }
+        .preview-box li {
+            margin-bottom: 2px;
         }
 
         .preview-box table {
             border-collapse: collapse;
             width: 100%;
+            margin: 8px 0;
+            font-size: 9pt;
         }
         .preview-box th,
         .preview-box td {
-            border: 1px solid #000;
-            padding: 6px 10px;
+            border: 1.5px solid #1a2a3a;
+            padding: 5px 8px;
             vertical-align: top;
+            text-align: left;
         }
         .preview-box th {
             background: #e6f0fa;
+            font-weight: 700;
+        }
+
+        .preview-box blockquote {
+            border-left: 4px solid #1a3c6e;
+            padding-left: 14px;
+            margin-left: 8px;
+            color: #2a3a4e;
+            font-style: italic;
+        }
+
+        .preview-box code {
+            background: #f0f2f5;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .preview-box pre {
+            background: #f0f2f5;
+            padding: 10px 14px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #dde4ed;
+            font-size: 8.5pt;
+            line-height: 1.5;
         }
 
         /* HINT */
@@ -328,8 +400,25 @@
                 margin-left: 0;
             }
             .preview-box {
-                padding: 12px 14px;
-                max-height: 380px;
+                padding: 16px 18px;
+                max-height: 400px;
+                font-size: 9pt;
+            }
+            .preview-box h1 {
+                font-size: 14pt;
+            }
+            .preview-box h2 {
+                font-size: 12pt;
+            }
+            .preview-box h3 {
+                font-size: 10.5pt;
+            }
+            .preview-box table {
+                font-size: 8.5pt;
+            }
+            .preview-box th,
+            .preview-box td {
+                padding: 4px 6px;
             }
             .hint {
                 font-size: 13px;
@@ -357,6 +446,11 @@
             .mode-bar select {
                 font-size: 13px;
                 padding: 5px 10px;
+            }
+            .preview-box {
+                padding: 12px 14px;
+                max-height: 340px;
+                font-size: 8.5pt;
             }
         }
     </style>
@@ -403,20 +497,20 @@ Mata kuliah ini mengkaji biografi perawi hadis.
 | 2      | Definisi Ilmu Rijal | 2% |
 | 3      | Sejarah Perkembangan | 3% |</textarea>
 
-        <!-- ACTION ROW (HORIZONTAL) -->
+        <!-- ACTION ROW (urutan: Tempel, Bersihkan, Salin, Tinjau, Unduh) -->
         <div class="action-row">
+            <button class="btn-clear" onclick="clearAll()">
+                <i class="fas fa-eraser"></i> Bersihkan
+            </button>
             <button class="btn-paste" onclick="pasteFromClipboard()">
                 <i class="fas fa-paste"></i> Tempel
             </button>
-            <button class="btn-clear" onclick="clearAll()">
-                <i class="fas fa-eraser"></i> Bersihkan
             </button>
             <button class="btn-preview" onclick="togglePreview()">
                 <i class="fas fa-eye"></i> Tinjau
             </button>
             <button class="btn-copy" onclick="copyText()">
                 <i class="fas fa-copy"></i> Salin
-            </button>
             <button class="btn-download" onclick="downloadDoc()">
                 <i class="fas fa-file-word"></i> Unduh
             </button>
@@ -426,18 +520,18 @@ Mata kuliah ini mengkaji biografi perawi hadis.
         <!-- PREVIEW -->
         <div id="previewArea" class="preview-area">
             <div class="preview-header">
-                <i class="fas fa-eye"></i> Live Preview
+                <i class="fas fa-eye"></i>Live Preview
             </div>
             <div id="previewBox" class="preview-box"></div>
         </div>
 
-        <!-- HINT -->
+        <!-- HINT (diperbarui sesuai urutan tombol) -->
         <div class="hint">
+            <span><i class="fas fa-eraser"></i> <strong>Bersihkan</strong> – bersihkan input area teks</span>
             <span><i class="fas fa-lightbulb"></i> <strong>Tempel</strong> – tempel teks dari clipboard</span>
-            <span><i class="fas fa-eraser"></i> <strong>Bersihkan</strong> – hapus area input teks</span>
             <span><i class="fas fa-eye"></i> <strong>Tinjau</strong> – lihat hasil render</span>
             <span><i class="fas fa-copy"></i> <strong>Salin</strong> – salin teks docx ke clipboard</span>
-            <span><i class="fas fa-file-word"></i> <strong>Unduh</strong> – download .doc (Word)</span>
+            <span><i class="fas fa-file-word"></i> <strong>Unduh</strong> – unduh format.doc</span>
         </div>
 
     </div>
@@ -459,7 +553,7 @@ Mata kuliah ini mengkaji biografi perawi hadis.
             } else {
                 // Auto detect
                 const trimmed = raw.trim();
-                const htmlTags = ['<html', '<table', '<div', '<p>', '<h1', '<h2', '<h3', '<ul>', '<ol>', '<body'];
+                const htmlTags = ['<html', '<table', '<div', '<p>', '<h1', '<h2', '<h3', '<ul', '<ol', '<body'];
                 let isHtml = false;
                 for (let tag of htmlTags) {
                     if (trimmed.toLowerCase().startsWith(tag) || trimmed.toLowerCase().includes(tag)) {
@@ -484,21 +578,25 @@ Mata kuliah ini mengkaji biografi perawi hadis.
             return htmlContent;
         }
 
-        // ---- Build full HTML for Word ----
+        // ---- Build full HTML for Word (dengan Aptos 9pt) ----
         function buildWordHTML(bodyHtml) {
             return `<!DOCTYPE html>
         <html>
         <head><meta charset="UTF-8">
         <style>
-        body { font-family: 'Times New Roman', Arial, sans-serif; margin: 30px; }
-        h1 { color: #1a3c6e; font-size: 22pt; }
-        h2 { color: #2a4c7e; font-size: 16pt; border-bottom: 1px solid #ccc; }
-        h3 { font-size: 14pt; font-weight: bold; }
-        table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+        body {
+            font-family: 'Aptos', 'Segoe UI', Arial, sans-serif;
+            font-size: 9pt;
+            margin: 30px;
+        }
+        h1 { color: #1a3c6e; font-size: 16pt; }
+        h2 { color: #2a4c7e; font-size: 13pt; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+        h3 { font-size: 11pt; font-weight: bold; }
+        table { border-collapse: collapse; width: 100%; margin-top: 8px; }
         th { background-color: #e6f0fa; font-weight: bold; text-align: center; }
-        th, td { border: 1px solid #000000; padding: 6px; vertical-align: top; }
-        ul, ol { margin-top: 5px; margin-bottom: 5px; }
-        p { text-align: justify; }
+        th, td { border: 1px solid #000000; padding: 5px 8px; vertical-align: top; }
+        ul, ol { margin-top: 4px; margin-bottom: 4px; padding-left: 24px; }
+        p { text-align: justify; margin-top: 4px; margin-bottom: 4px; }
         </style>
         </head>
         <body>

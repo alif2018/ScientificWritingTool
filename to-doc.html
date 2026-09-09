@@ -1,400 +1,462 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>HTML/Markdown → RTF (.rtf)</title>
-<!-- Font Awesome 6 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-<!-- marked.js -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML/Markdown → RTF (.rtf)</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- marked.js -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #ffffff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            background: #ffffff;
+            padding: 12px 16px;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        /* HEADER */
+        .app-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .app-header h1 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a3c6e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .app-header h1 i {
+            font-size: 20px;
+            color: #1a3c6e;
+        }
+        /* MODE SELECTOR */
+        .mode-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 12px;
+            background: #f5f8fd;
+            padding: 6px 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .mode-bar label {
+            font-weight: 600;
+            color: #1a3c6e;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .mode-bar select {
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid #ccd7e6;
+            background: white;
+            font-size: 12px;
+            color: #1a3c6e;
+            outline: none;
+        }
+        .mode-hint {
+            font-size: 12px;
+            color: #4a5b6e;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        /* TEXTAREA */
+        textarea {
+            width: 100%;
+            min-height: 220px;
+            padding: 10px 12px;
+            font-family: 'Cascadia Code', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            border: 2px solid #dce4ed;
+            border-radius: 8px;
+            resize: vertical;
+            background: #fafcff;
+            color: #1e2a3a;
+        }
+        textarea:focus {
+            border-color: #1a3c6e;
+            outline: none;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(26, 60, 110, 0.08);
+        }
+        /* ACTION ROW */
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            margin: 10px 0;
+        }
+        .action-row button {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #eef3fa;
+            color: #1a3c6e;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .action-row button i {
+            font-size: 12px;
+        }
+        .action-row button:hover {
+            background: #dce6f2;
+        }
+        .btn-paste { background: #e3eefa; color: #0d2f5a; }
+        .btn-clear { background: #fce9e9; color: #b71c1c; }
+        .btn-copy { background: #e0f0e8; color: #1e5a3a; }
+        .btn-preview { background: #e8ecf5; color: #2a4a7a; }
+        .btn-download { background: #1a3c6e; color: white; padding: 6px 16px; }
+        .btn-download:hover { background: #234e8a; }
+        
+        .action-row .msg {
+            font-size: 12px;
+            font-weight: 500;
+            color: #2e7d32;
+            margin-left: 4px;
+            flex: 1 1 auto;
+        }
+        /* PREVIEW AREA */
+        .preview-area {
+            margin-top: 10px;
+            border: 2px dashed #b8cce0;
+            border-radius: 10px;
+            padding: 10px;
+            background: #f9fcff;
+            display: none;
+            width: 100%;
+        }
+        .preview-area.visible {
+            display: block;
+        }
+        .preview-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a3c6e;
+            margin-bottom: 6px;
+        }
+        .preview-box {
+            background: white;
+            padding: 12px 14px;
+            border-radius: 6px;
+            border: 1px solid #dde4ed;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+            width: 100%;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 8pt;
+            line-height: 1.4;
+            color: #1e2a3a;
+        }
+        .preview-box h1, .preview-box h2, .preview-box h3, .preview-box p, .preview-box ul, .preview-box ol, .preview-box table {
+            margin-top: 0.3em;
+            margin-bottom: 0.4em;
+        }
+        .preview-box h1 { font-size: 12pt; color: #1a3c6e; }
+        .preview-box h2 { font-size: 10pt; color: #2a4c7e; border-bottom: 1px solid #d0d8e4; padding-bottom: 2px; }
+        .preview-box h3 { font-size: 8pt; font-weight: 700; }
+        .preview-box ul, .preview-box ol { padding-left: 18px; }
+        .preview-box table { border-collapse: collapse; width: 100%; margin: 6px 0; }
+        .preview-box th, .preview-box td { border: 1px solid #1a2a3a; padding: 3px 5px; vertical-align: top; text-align: left; }
+        .preview-box th { background: #e6f0fa; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="app-header">
+            <h1>
+                <i class="fas fa-file-code"></i>
+                HTML / Markdown → RTF (.rtf)
+            </h1>
+        </div>
+        <!-- MODE -->
+        <div class="mode-bar">
+            <label for="modeSelect">
+                <i class="fas fa-sliders-h"></i> Mode:
+            </label>
+            <select id="modeSelect">
+                <option value="auto">Auto Detect</option>
+                <option value="html">HTML (Langsung)</option>
+                <option value="markdown">Markdown (Konversi)</option>
+            </select>
+            <span class="mode-hint">
+                <i class="fas fa-info-circle"></i> Deteksi otomatis + Normalisasi Shading Tabel
+            </span>
+        </div>
+        <!-- TEXTAREA -->
+        <textarea id="myText" spellcheck="false"># RPS Mata Kuliah Ilmu Rijal Hadis
+## Deskripsi
+Mata kuliah ini mengkaji biografi perawi hadis.
+## Tabel Pertemuan
+
+| Minggu | Materi | Bobot |
+| :--- | :--- | :--- |
+| 1 | Kontrak Kuliah | 0% |
+| 2 | Definisi Ilmu Rijal | 2% |
+| 3 | Sejarah Perkembangan | 3% | </textarea>
+
+        <!-- ACTION ROW -->
+        <div class="action-row">
+            <button class="btn-clear" onclick="clearAll()">
+                <i class="fas fa-eraser"></i> Bersihkan
+            </button>
+            <button class="btn-paste" onclick="pasteFromClipboard()">
+                <i class="fas fa-paste"></i> Tempel
+            </button>
+            <button class="btn-preview" onclick="togglePreview()">
+                <i class="fas fa-eye"></i> Tinjau
+            </button>
+            <button class="btn-copy" onclick="copyRichText()">
+                <i class="fas fa-copy"></i> Salin
+            </button>
+            <button class="btn-download" onclick="downloadRtf()">
+                <i class="fas fa-file-alt"></i> Unduh .rtf
+            </button>
+            <span id="msg" class="msg"></span>
+        </div>
+        <!-- PREVIEW -->
+        <div id="previewArea" class="preview-area">
+            <div class="preview-header">
+                <i class="fas fa-eye"></i> Live Preview (8pt)
+            </div>
+            <div id="previewBox" class="preview-box"></div>
+        </div>
+    </div>
+    <script>
+        marked.setOptions({ tables: true, breaks: true, gfm: true });
+        // Fungsi pembantu untuk mendeteksi warna selain turunan hitam (abu-abu/putih) 
+        // dan mengubahnya menjadi warna abu-abu (grayscale).
+        function sanitizeRowShading(htmlString) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlString, 'text/html');
+            
+            // Cari semua elemen baris (tr) atau sel (td/th) yang memiliki atribut style background/background-color
+            const elements = doc.querySelectorAll('tr, td, th');
+            
+            elements.forEach(el => {
+                let bg = el.style.backgroundColor || el.getAttribute('bgcolor');
+                if (!bg) {
+                    // Cek inline style manual jika ada
+                    const styleAttr = el.getAttribute('style');
+                    if (styleAttr && styleAttr.includes('background')) {
+                        // Sederhanakan ekstraksi atau langsung parse via dummy element
+                    }
+                }
+                if (bg) {
+                    const rgbMatch = bg.match(/rgb\(\s*(\d+),\s*(\d+),\s*(\d+)\s*\)/i);
+                    const hexMatch = bg.match(/#([0-9a-fA-F]{3,6})/i);
+                    
+                    let r = -1, g = -1, b = -1;
+                    if (rgbMatch) {
+                        r = parseInt(rgbMatch[1]);
+                        g = parseInt(rgbMatch[2]);
+                        b = parseInt(rgbMatch[3]);
+                    } else if (hexMatch) {
+                        let hex = hexMatch[1];
+                        if (hex.length === 3) {
+                            hex = hex.split('').map(c => c + c).join('');
+                        }
+                        r = parseInt(hex.substring(0, 2), 16);
+                        g = parseInt(hex.substring(2, 4), 16);
+                        b = parseInt(hex.substring(4, 6), 16);
+                    }
+                    if (r !== -1 && g !== -1 && b !== -1) {
+                        // Cek apakah warna tersebut bukan turunan hitam/putih/abu-abu (artinya R, G, B tidak selaras/memiliki rona warna lain)
+                        const threshold = 15; // Toleransi deviasi warna
+                        const isGray = Math.abs(r - g) <= threshold && Math.abs(g - b) <= threshold && Math.abs(r - b) <= threshold;
+                        
+                        if (!isGray) {
+                            // Konversi ke warna abu-abu netral berdasarkan tingkat kecerahan (luminance rata-rata)
+                            const avg = Math.round((r + g + b) / 3);
+                            el.style.backgroundColor = `rgb(${avg}, ${avg}, ${avg})`;
+                            if (el.hasAttribute('bgcolor')) {
+                                el.setAttribute('bgcolor', `rgb(${avg}, ${avg}, ${avg})`);
+                            }
+                        }
+                    }
+                }
+            });
+            return doc.body.innerHTML;
+        }
+        function getConvertedHTML() {
+            const raw = document.getElementById('myText').value;
+            const mode = document.getElementById('modeSelect').value;
+            let htmlContent = raw;
+            if (mode === 'markdown') {
+                htmlContent = marked.parse(raw);
+            } else if (mode === 'html') {
+                htmlContent = raw;
+            } else {
+                const trimmed = raw.trim();
+                const htmlTags = ['<html', '<table', '<div', '<p>', '<h1', '<h2', '<h3', '<ul', '<ol', '<body'];
+                let isHtml = false;
+                for (let tag of htmlTags) {
+                    if (trimmed.toLowerCase().startsWith(tag) || trimmed.toLowerCase().includes(tag)) {
+                        isHtml = true;
+                        break;
+                    }
+                }
+                if (!isHtml) {
+                    const lines = trimmed.split('\n');
+                    let hasPipe = false, hasDash = false;
+                    for (let line of lines) {
+                        if (line.includes('|')) hasPipe = true;
+                        if (line.includes('---') || line.includes('--')) hasDash = true;
+                    }
+                    if (hasPipe && hasDash) isHtml = false;
+                    else if (hasPipe) isHtml = false;
+                }
+                htmlContent = isHtml ? raw : marked.parse(raw);
+            }
+            // Terapkan pembersihan shading baris tabel di sini
+            return sanitizeRowShading(htmlContent);
+        }
+        function buildFullHTML(bodyHtml) {
+            return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
 <style>
-* {
-box-sizing: border-box;
-}
 body {
-font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-background: #ffffff;
-margin: 0;
-padding: 0;
-min-height: 100vh;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 9pt;
+    color: #1e2a3a;
 }
-.container {
-width: 100%;
-min-height: 100vh;
-background: #ffffff;
-padding: 12px 16px;
-border-radius: 0;
-box-shadow: none;
-}
-/* HEADER /
-.app-header {
-display: flex;
-align-items: center;
-gap: 10px;
-margin-bottom: 10px;
-}
-.app-header h1 {
-margin: 0;
-font-size: 18px;
-font-weight: 600;
-color: #1a3c6e;
-display: flex;
-align-items: center;
-gap: 8px;
-}
-.app-header h1 i {
-font-size: 20px;
-color: #1a3c6e;
-}
-/ MODE SELECTOR /
-.mode-bar {
-display: flex;
-flex-wrap: wrap;
-align-items: center;
-gap: 8px 12px;
-background: #f5f8fd;
-padding: 6px 10px;
-border-radius: 8px;
-margin-bottom: 10px;
-}
-.mode-bar label {
-font-weight: 600;
-color: #1a3c6e;
-font-size: 13px;
-display: flex;
-align-items: center;
-gap: 5px;
-}
-.mode-bar select {
-padding: 3px 8px;
-border-radius: 6px;
-border: 1px solid #ccd7e6;
-background: white;
-font-size: 12px;
-color: #1a3c6e;
-outline: none;
-}
-.mode-hint {
-font-size: 12px;
-color: #4a5b6e;
-display: flex;
-align-items: center;
-gap: 4px;
-}
-/ TEXTAREA /
-textarea {
-width: 100%;
-min-height: 220px;
-padding: 10px 12px;
-font-family: 'Cascadia Code', 'Courier New', monospace;
-font-size: 13px;
-line-height: 1.4;
-border: 1px solid #dce4ed;
-border-radius: 6px;
-resize: vertical;
-background: #ffffff;
-color: #1e2a3a;
-}
-textarea:focus {
-border-color: #1a3c6e;
-outline: none;
-box-shadow: 0 0 0 2px rgba(26, 60, 110, 0.08);
-}
-/ ACTION ROW */
-.action-row {
-display: flex;
-flex-wrap: wrap;
-align-items: center;
-gap: 6px;
-margin: 10px 0;
-}
-.action-row button {
-display: inline-flex;
-align-items: center;
-gap: 5px;
-padding: 6px 12px;
-border: none;
-border-radius: 16px;
-font-size: 12px;
-font-weight: 600;
-cursor: pointer;
-background: #eef3fa;
-color: #1a3c6e;
-transition: all 0.15s;
-white-space: nowrap;
-}
-.action-row button i {
-font-size: 12px;
-}
-.action-row button:hover {
-background: #dce6f2;
-}
-.btn-paste { background: #e3eefa; color: #0d2f5a; }
-.btn-clear { background: #fce9e9; color: #b71c1c; }
-.btn-copy { background: #e0f0e8; color: #1e5a3a; }
-.btn-preview { background: #e8ecf5; color: #2a4a7a; }
-.btn-download { background: #1a3c6e; color: white; padding: 6px 16px; }
-.btn-download:hover { background: #234e8a; }
-
-.action-row .msg {
-font-size: 12px;
-font-weight: 500;
-color: #2e7d32;
-margin-left: 4px;
-flex: 1 1 auto;
-}
-/* PREVIEW AREA */
-.preview-area {
-margin-top: 10px;
-border: 1px solid #dde4ed;
-border-radius: 6px;
-padding: 10px;
-background: #ffffff;
-display: none;
-width: 100%;
-}
-.preview-area.visible {
-display: block;
-}
-.preview-header {
-display: flex;
-align-items: center;
-gap: 6px;
-font-size: 13px;
-font-weight: 600;
-color: #1a3c6e;
-margin-bottom: 6px;
-}
-.preview-box {
-background: white;
-padding: 8px 4px;
-border-radius: 4px;
-border: none;
-overflow-x: auto;
-max-height: 400px;
-overflow-y: auto;
-width: 100%;
-font-family: 'Segoe UI', Arial, sans-serif;
-font-size: 8pt;
-line-height: 1.4;
-color: #1e2a3a;
-}
-.preview-box h1, .preview-box h2, .preview-box h3, .preview-box p, .preview-box ul, .preview-box ol, .preview-box table {
-margin-top: 0.3em;
-margin-bottom: 0.4em;
-}
-.preview-box h1 { font-size: 12pt; color: #1a3c6e; }
-.preview-box h2 { font-size: 10pt; color: #2a4c7e; border-bottom: 1px solid #d0d8e4; padding-bottom: 2px; }
-.preview-box h3 { font-size: 8pt; font-weight: 700; }
-.preview-box ul, .preview-box ol { padding-left: 18px; }
-
-/* DIPERBAIKI: Memastikan tabel dan sel di dalam preview-box menggunakan garis solid tegas */
-.preview-box table {
-border-collapse: collapse !important;
-width: 100% !important;
-margin: 6px 0 !important;
-border: 1px solid #1a2a3a !important;
-}
-.preview-box th, .preview-box td {
-border: 1px solid #1a2a3a !important;
-padding: 4px 6px !important;
-vertical-align: top !important;
-text-align: left !important;
-}
-.preview-box th {
-background: #e6f0fa !important;
-font-weight: 700 !important;
-}
+h1 { color: #1a3c6e; font-size: 13pt; }
+h2 { color: #2a4c7e; font-size: 10pt; border-bottom: 1px solid #ccc; padding-bottom: 2px; }
+h3 { font-size: 9pt; font-weight: bold; }
+table { border-collapse: collapse; width: 100%; margin-top: 6px; }
+th { background-color: #e6f0fa; font-weight: bold; text-align: center; }
+th, td { border: 1px solid #000000; padding: 4px 6px; vertical-align: top; }
+ul, ol { margin-top: 3px; margin-bottom: 3px; padding-left: 20px; }
+p { margin-top: 3px; margin-bottom: 3px; }
 </style>
 </head>
 <body>
-<div class="container">
-<!-- HEADER -->
-<div class="app-header">
-<h1>
-<i class="fas fa-file-code"></i>
-HTML / Markdown → RTF (.rtf)
-</h1>
-</div>
-<!-- MODE -->
-<div class="mode-bar">
-<label for="modeSelect">
-<i class="fas fa-sliders-h"></i> Mode:
-</label>
-<select id="modeSelect">
-<option value="auto">Auto Detect</option>
-<option value="html">HTML (Langsung)</option>
-<option value="markdown">Markdown (Konversi)</option>
-</select>
-<span class="mode-hint">
-<i class="fas fa-info-circle"></i> Auto deteksi format
-</span>
-</div>
-<!-- TEXTAREA -->
-<textarea id="myText" spellcheck="false"># RPS Mata Kuliah Ilmu Rijal Hadis
-Deskripsi
-Mata kuliah ini mengkaji biografi perawi hadis.
-Tabel Pertemuan
-
-
-Minggu
-Materi
-Bobot
-
-
-1
-Kontrak Kuliah
-0%
-
-
-2
-Definisi Ilmu Rijal
-2%
-
-
-3
-Sejarah Perkembangan
-3%
-</textarea>
-
-
-
-<!-- ACTION ROW -->
-<div class="action-row">
-<button class="btn-clear" onclick="clearAll()">
-<i class="fas fa-eraser"></i> Bersihkan
-</button>
-<button class="btn-paste" onclick="pasteFromClipboard()">
-<i class="fas fa-paste"></i> Tempel
-</button>
-<button class="btn-preview" onclick="togglePreview()">
-<i class="fas fa-eye"></i> Tinjau
-</button>
-<button class="btn-copy" onclick="copyRichText()">
-<i class="fas fa-copy"></i> Salin
-</button>
-<button class="btn-download" onclick="downloadRtf()">
-<i class="fas fa-file-alt"></i> Unduh .rtf
-</button>
-<span id="msg" class="msg"></span>
-</div>
-<!-- PREVIEW -->
-<div id="previewArea" class="preview-area">
-<div class="preview-header">
-<i class="fas fa-eye"></i> Live Preview (8pt)
-</div>
-<div id="previewBox" class="preview-box"></div>
-</div>
-</div>
-<script>
-marked.setOptions({ tables: true, breaks: true, gfm: true });
-function sanitizeRowShading(htmlString) {
-const parser = new DOMParser();
-const doc = parser.parseFromString(htmlString, 'text/html');
-const elements = doc.querySelectorAll('tr, td, th');
-
-elements.forEach(el => {
-let bg = el.style.backgroundColor || el.getAttribute('bgcolor');
-if (bg) {
-const rgbMatch = bg.match(/rgb(\s*(\d+),\s*(\d+),\s*(\d+)\s*)/i);
-const hexMatch = bg.match(/#([0-9a-fA-F]{3,6})/i);
-
-let r = -1, g = -1, b = -1;
-if (rgbMatch) {
-r = parseInt(rgbMatch[1]);
-g = parseInt(rgbMatch[2]);
-b = parseInt(rgbMatch[3]);
-} else if (hexMatch) {
-let hex = hexMatch[1];
-if (hex.length === 3) {
-hex = hex.split('').map(c => c + c).join('');
-}
-r = parseInt(hex.substring(0, 2), 16);
-g = parseInt(hex.substring(2, 4), 16);
-b = parseInt(hex.substring(4, 6), 16);
-}
-if (r !== -1 && g !== -1 && b !== -1) {
-const threshold = 15;
-const isGray = Math.abs(r - g) <= threshold && Math.abs(g - b) <= threshold && Math.abs(r - b) <= threshold;
-
-if (!isGray) {
-const avg = Math.round((r + g + b) / 3);
-el.style.backgroundColor = rgb(${avg}, ${avg}, ${avg}); if (el.hasAttribute('bgcolor')) { el.setAttribute('bgcolor',rgb(${avg}, ${avg}, ${avg}));
-}
-}
-}
-}
-});
-return doc.body.innerHTML;
-}
-function getConvertedHTML() {
-const raw = document.getElementById('myText').value;
-const mode = document.getElementById('modeSelect').value;
-let htmlContent = raw;
-if (mode === 'markdown') {
-htmlContent = marked.parse(raw);
-} else if (mode === 'html') {
-htmlContent = raw;
-} else {
-const trimmed = raw.trim();
-const htmlTags = ['<html', '<table', '<div', '<p>', '<h1', '<h2', '<h3', '<ul', '<ol', '<body'];
-let isHtml = false;
-for (let tag of htmlTags) {
-if (trimmed.toLowerCase().startsWith(tag) || trimmed.toLowerCase().includes(tag)) {
-isHtml = true;
-break;
-}
-}
-if (!isHtml) {
-const lines = trimmed.split('\n');
-let hasPipe = false, hasDash = false;
-for (let line of lines) {
-if (line.includes('|')) hasPipe = true;
-if (line.includes('---') || line.includes('--')) hasDash = true;
-}
-if (hasPipe && hasDash) isHtml = false;
-else if (hasPipe) isHtml = false;
-}
-htmlContent = isHtml ? raw : marked.parse(raw);
-}
-return sanitizeRowShading(htmlContent);
-}
-function buildFullHTML(bodyHtml) {
-return <!DOCTYPE html&gt; &lt;html&gt; &lt;head&gt; &lt;meta charset="UTF-8"&gt; &lt;style&gt; body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 9pt; color: #1e2a3a; } h1 { color: #1a3c6e; font-size: 13pt; } h2 { color: #2a4c7e; font-size: 10pt; border-bottom: 1px solid #ccc; padding-bottom: 2px; } h3 { font-size: 9pt; font-weight: bold; } table { border-collapse: collapse; width: 100%; margin-top: 6px; } th { background-color: #e6f0fa; font-weight: bold; text-align: center; } th, td { border: 1px solid #000000; padding: 4px 6px; vertical-align: top; } ul, ol { margin-top: 3px; margin-bottom: 3px; padding-left: 20px; } p { margin-top: 3px; margin-bottom: 3px; } &lt;/style&gt; &lt;/head&gt; &lt;body&gt; ${bodyHtml}
+${bodyHtml}
 </body>
-</html>; } function pasteFromClipboard() { if (!navigator.clipboard) { alert('Clipboard tidak tersedia.'); return; } navigator.clipboard.readText() .then(text =&gt; { document.getElementById('myText').value = text; showMsg('Ditempel'); }) .catch(() =&gt; alert('Gagal membaca clipboard.')); } function clearAll() { document.getElementById('myText').value = ''; const area = document.getElementById('previewArea'); if (area.classList.contains('visible')) { area.classList.remove('visible'); document.getElementById('previewBox').innerHTML = ''; } showMsg('Dibersihkan'); } async function copyRichText() { const raw = document.getElementById('myText').value; if (!raw) { alert('Teks kosong.'); return; } try { const htmlBody = getConvertedHTML(); const fullHtml = buildFullHTML(htmlBody); const tempDiv = document.createElement('div'); tempDiv.innerHTML = htmlBody; const plainText = tempDiv.textContent || tempDiv.innerText || raw; if (navigator.clipboard && window.ClipboardItem) { const clipboardItem = new ClipboardItem({ 'text/html': new Blob([fullHtml], { type: 'text/html' }), 'text/plain': new Blob([plainText], { type: 'text/plain' }) }); await navigator.clipboard.write([clipboardItem]); showMsg('Berhasil disalin!'); } else { await navigator.clipboard.writeText(plainText); showMsg('Disalin sebagai teks biasa.'); } } catch (e) { alert('Gagal menyalin: ' + e.message); } } function togglePreview() { const area = document.getElementById('previewArea'); const box = document.getElementById('previewBox'); if (area.classList.contains('visible')) { area.classList.remove('visible'); return; } try { box.innerHTML = getConvertedHTML(); area.classList.add('visible'); showMsg('Pratinjau dimuat'); } catch (e) { box.innerHTML =<p style="color:#b71c1c;">Error: ${e.message}&lt;/p>;
-area.classList.add('visible');
-}
-}
-function downloadRtf() {
-const raw = document.getElementById('myText').value;
-if (!raw) { alert('Teks kosong.'); return; }
-
-try {
-const htmlBody = getConvertedHTML();
-const blob = new Blob([htmlBody], { type: 'application/rtf;charset=utf-8' });
-const url = URL.createObjectURL(blob);
-
-const link = document.createElement('a');
-link.href = url;
-link.download = 'Dokumen.rtf';
-document.body.appendChild(link);
-link.click();
-document.body.removeChild(link);
-URL.revokeObjectURL(url);
-
-showMsg('File .rtf diunduh!');
-} catch (err) {
-alert('Gagal mengunduh: ' + err.message);
-}
-}
-function showMsg(text) {
-const el = document.getElementById('msg');
-el.textContent = text;
-clearTimeout(el._timer);
-el._timer = setTimeout(() => { el.textContent = ''; }, 3500);
-}
-</script>
+</html>`;
+        }
+        function pasteFromClipboard() {
+            if (!navigator.clipboard) { alert('Clipboard tidak tersedia.'); return; }
+            navigator.clipboard.readText()
+                .then(text => {
+                    document.getElementById('myText').value = text;
+                    showMsg('Ditempel');
+                })
+                .catch(() => alert('Gagal membaca clipboard.'));
+        }
+        function clearAll() {
+            document.getElementById('myText').value = '';
+            const area = document.getElementById('previewArea');
+            if (area.classList.contains('visible')) {
+                area.classList.remove('visible');
+                document.getElementById('previewBox').innerHTML = '';
+            }
+            showMsg('Dibersihkan');
+        }
+        async function copyRichText() {
+            const raw = document.getElementById('myText').value;
+            if (!raw) { alert('Teks kosong.'); return; }
+            try {
+                const htmlBody = getConvertedHTML();
+                const fullHtml = buildFullHTML(htmlBody);
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = htmlBody;
+                const plainText = tempDiv.textContent || tempDiv.innerText || raw;
+                if (navigator.clipboard && window.ClipboardItem) {
+                    const clipboardItem = new ClipboardItem({
+                        'text/html': new Blob([fullHtml], { type: 'text/html' }),
+                        'text/plain': new Blob([plainText], { type: 'text/plain' })
+                    });
+                    await navigator.clipboard.write([clipboardItem]);
+                    showMsg('Berhasil disalin!');
+                } else {
+                    await navigator.clipboard.writeText(plainText);
+                    showMsg('Disalin sebagai teks biasa.');
+                }
+            } catch (e) {
+                alert('Gagal menyalin: ' + e.message);
+            }
+        }
+        function togglePreview() {
+            const area = document.getElementById('previewArea');
+            const box = document.getElementById('previewBox');
+            if (area.classList.contains('visible')) {
+                area.classList.remove('visible');
+                return;
+            }
+            try {
+                box.innerHTML = getConvertedHTML();
+                area.classList.add('visible');
+                showMsg('Pratinjau dimuat');
+            } catch (e) {
+                box.innerHTML = `<p style="color:#b71c1c;">Error: ${e.message}</p>`;
+                area.classList.add('visible');
+            }
+        }
+        function downloadRtf() {
+            const raw = document.getElementById('myText').value;
+            if (!raw) { alert('Teks kosong.'); return; }
+            
+            try {
+                const htmlBody = getConvertedHTML();
+                const blob = new Blob([htmlBody], { type: 'application/rtf;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'Dokumen.rtf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                showMsg('File .rtf diunduh!');
+            } catch (err) {
+                alert('Gagal mengunduh: ' + err.message);
+            }
+        }
+        function showMsg(text) {
+            const el = document.getElementById('msg');
+            el.textContent = text;
+            clearTimeout(el._timer);
+            el._timer = setTimeout(() => { el.textContent = ''; }, 3500);
+        }
+    </script>
 </body>
 </html>

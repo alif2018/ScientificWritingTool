@@ -14,18 +14,18 @@
         }
         body {
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-            background: #ffffff;
+            background: #ffffff; /* Latar belakang body diubah jadi putih */
             margin: 0;
-            padding: 0;
+            padding: 0; /* Menghilangkan padding body */
             min-height: 100vh;
         }
         .container {
             width: 100%;
             min-height: 100vh;
             background: #ffffff;
-            padding: 12px 16px;
-            border-radius: 0;
-            box-shadow: none;
+            padding: 12px 16px; /* Padding dalam kontainer agar konten tidak terlalu menempel ke kaca layar */
+            border-radius: 0; /* Menghilangkan sudut melengkung agar pas di tepi */
+            box-shadow: none; /* Menghilangkan bayangan */
         }
         /* HEADER */
         .app-header {
@@ -177,7 +177,7 @@
             overflow-y: auto;
             width: 100%;
             font-family: 'Segoe UI', Arial, sans-serif;
-            font-size: 8pt;
+            font-size: 8pt; /* Ukuran font pratinjau 8pt */
             line-height: 1.4;
             color: #1e2a3a;
         }
@@ -214,7 +214,7 @@
                 <option value="markdown">Markdown (Konversi)</option>
             </select>
             <span class="mode-hint">
-                <i class="fas fa-info-circle"></i> Deteksi otomatis + Normalisasi Shading Tabel
+                <i class="fas fa-info-circle"></i> Deteksi otomatis
             </span>
         </div>
         <!-- TEXTAREA -->
@@ -258,60 +258,6 @@ Mata kuliah ini mengkaji biografi perawi hadis.
     </div>
     <script>
         marked.setOptions({ tables: true, breaks: true, gfm: true });
-        // Fungsi pembantu untuk mendeteksi warna selain turunan hitam (abu-abu/putih) 
-        // dan mengubahnya menjadi warna abu-abu (grayscale).
-        function sanitizeRowShading(htmlString) {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(htmlString, 'text/html');
-            
-            // Cari semua elemen baris (tr) atau sel (td/th) yang memiliki atribut style background/background-color
-            const elements = doc.querySelectorAll('tr, td, th');
-            
-            elements.forEach(el => {
-                let bg = el.style.backgroundColor || el.getAttribute('bgcolor');
-                if (!bg) {
-                    // Cek inline style manual jika ada
-                    const styleAttr = el.getAttribute('style');
-                    if (styleAttr && styleAttr.includes('background')) {
-                        // Sederhanakan ekstraksi atau langsung parse via dummy element
-                    }
-                }
-                if (bg) {
-                    const rgbMatch = bg.match(/rgb\(\s*(\d+),\s*(\d+),\s*(\d+)\s*\)/i);
-                    const hexMatch = bg.match(/#([0-9a-fA-F]{3,6})/i);
-                    
-                    let r = -1, g = -1, b = -1;
-                    if (rgbMatch) {
-                        r = parseInt(rgbMatch[1]);
-                        g = parseInt(rgbMatch[2]);
-                        b = parseInt(rgbMatch[3]);
-                    } else if (hexMatch) {
-                        let hex = hexMatch[1];
-                        if (hex.length === 3) {
-                            hex = hex.split('').map(c => c + c).join('');
-                        }
-                        r = parseInt(hex.substring(0, 2), 16);
-                        g = parseInt(hex.substring(2, 4), 16);
-                        b = parseInt(hex.substring(4, 6), 16);
-                    }
-                    if (r !== -1 && g !== -1 && b !== -1) {
-                        // Cek apakah warna tersebut bukan turunan hitam/putih/abu-abu (artinya R, G, B tidak selaras/memiliki rona warna lain)
-                        const threshold = 15; // Toleransi deviasi warna
-                        const isGray = Math.abs(r - g) <= threshold && Math.abs(g - b) <= threshold && Math.abs(r - b) <= threshold;
-                        
-                        if (!isGray) {
-                            // Konversi ke warna abu-abu netral berdasarkan tingkat kecerahan (luminance rata-rata)
-                            const avg = Math.round((r + g + b) / 3);
-                            el.style.backgroundColor = `rgb(${avg}, ${avg}, ${avg})`;
-                            if (el.hasAttribute('bgcolor')) {
-                                el.setAttribute('bgcolor', `rgb(${avg}, ${avg}, ${avg})`);
-                            }
-                        }
-                    }
-                }
-            });
-            return doc.body.innerHTML;
-        }
         function getConvertedHTML() {
             const raw = document.getElementById('myText').value;
             const mode = document.getElementById('modeSelect').value;
@@ -342,8 +288,7 @@ Mata kuliah ini mengkaji biografi perawi hadis.
                 }
                 htmlContent = isHtml ? raw : marked.parse(raw);
             }
-            // Terapkan pembersihan shading baris tabel di sini
-            return sanitizeRowShading(htmlContent);
+            return htmlContent;
         }
         function buildFullHTML(bodyHtml) {
             return `<!DOCTYPE html>
@@ -353,7 +298,7 @@ Mata kuliah ini mengkaji biografi perawi hadis.
 <style>
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    font-size: 9pt;
+    font-size: 9pt; /* Hasil unduh diset ke 9pt */
     color: #1e2a3a;
 }
 h1 { color: #1a3c6e; font-size: 13pt; }

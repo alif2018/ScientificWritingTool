@@ -14,32 +14,29 @@
         }
         body {
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-            background: #f0f4f9;
+            background: #ffffff; /* Latar belakang body diubah jadi putih */
             margin: 0;
+            padding: 0; /* Menghilangkan padding body */
             min-height: 100vh;
-            padding: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
         }
         .container {
-            max-width: 1300px; /* Frame diperlebar */
             width: 100%;
+            min-height: 100vh;
             background: #ffffff;
-            padding: 20px 24px;
-            border-radius: 16px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            padding: 12px 16px; /* Padding dalam kontainer agar konten tidak terlalu menempel ke kaca layar */
+            border-radius: 0; /* Menghilangkan sudut melengkung agar pas di tepi */
+            box-shadow: none; /* Menghilangkan bayangan */
         }
         /* HEADER */
         .app-header {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         .app-header h1 {
             margin: 0;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
             color: #1a3c6e;
             display: flex;
@@ -47,7 +44,7 @@
             gap: 8px;
         }
         .app-header h1 i {
-            font-size: 22px;
+            font-size: 20px;
             color: #1a3c6e;
         }
         /* MODE SELECTOR */
@@ -55,46 +52,46 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 10px 16px;
+            gap: 8px 12px;
             background: #f5f8fd;
-            padding: 8px 14px;
-            border-radius: 10px;
-            margin-bottom: 12px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
         .mode-bar label {
             font-weight: 600;
             color: #1a3c6e;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .mode-bar select {
-            padding: 4px 10px;
-            border-radius: 6px;
-            border: 1px solid #ccd7e6;
-            background: white;
             font-size: 13px;
-            color: #1a3c6e;
-            outline: none;
-        }
-        .mode-hint {
-            font-size: 13px;
-            color: #4a5b6e;
             display: flex;
             align-items: center;
             gap: 5px;
         }
+        .mode-bar select {
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid #ccd7e6;
+            background: white;
+            font-size: 12px;
+            color: #1a3c6e;
+            outline: none;
+        }
+        .mode-hint {
+            font-size: 12px;
+            color: #4a5b6e;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
         /* TEXTAREA */
         textarea {
             width: 100%;
-            min-height: 200px;
-            padding: 12px 16px;
+            min-height: 220px;
+            padding: 10px 12px;
             font-family: 'Cascadia Code', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
+            font-size: 13px;
+            line-height: 1.4;
             border: 2px solid #dce4ed;
-            border-radius: 10px;
+            border-radius: 8px;
             resize: vertical;
             background: #fafcff;
             color: #1e2a3a;
@@ -105,22 +102,22 @@
             background: #ffffff;
             box-shadow: 0 0 0 3px rgba(26, 60, 110, 0.08);
         }
-        /* ACTION ROW (Tombol diperkecil agar hemat tempat) */
+        /* ACTION ROW */
         .action-row {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 8px;
-            margin: 12px 0 10px 0;
+            gap: 6px;
+            margin: 10px 0;
         }
         .action-row button {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 14px; /* Padding lebih kecil */
+            gap: 5px;
+            padding: 6px 12px;
             border: none;
-            border-radius: 20px;
-            font-size: 13px; /* Ukuran font tombol lebih kecil */
+            border-radius: 16px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             background: #eef3fa;
@@ -129,7 +126,7 @@
             white-space: nowrap;
         }
         .action-row button i {
-            font-size: 13px;
+            font-size: 12px;
         }
         .action-row button:hover {
             background: #dce6f2;
@@ -138,11 +135,11 @@
         .btn-clear { background: #fce9e9; color: #b71c1c; }
         .btn-copy { background: #e0f0e8; color: #1e5a3a; }
         .btn-preview { background: #e8ecf5; color: #2a4a7a; }
-        .btn-download { background: #1a3c6e; color: white; padding: 6px 18px; }
+        .btn-download { background: #1a3c6e; color: white; padding: 6px 16px; }
         .btn-download:hover { background: #234e8a; }
         
         .action-row .msg {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
             color: #2e7d32;
             margin-left: 4px;
@@ -150,10 +147,10 @@
         }
         /* PREVIEW AREA */
         .preview-area {
-            margin-top: 12px;
+            margin-top: 10px;
             border: 2px dashed #b8cce0;
-            border-radius: 12px;
-            padding: 14px;
+            border-radius: 10px;
+            padding: 10px;
             background: #f9fcff;
             display: none;
             width: 100%;
@@ -164,42 +161,37 @@
         .preview-header {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 14px;
+            gap: 6px;
+            font-size: 13px;
             font-weight: 600;
             color: #1a3c6e;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .preview-box {
             background: white;
-            padding: 16px 20px;
-            border-radius: 8px;
+            padding: 12px 14px;
+            border-radius: 6px;
             border: 1px solid #dde4ed;
             overflow-x: auto;
-            max-height: 450px;
+            max-height: 400px;
             overflow-y: auto;
             width: 100%;
             font-family: 'Segoe UI', Arial, sans-serif;
-            font-size: 8pt; /* Font pratinjau diset ke 8pt */
-            line-height: 1.5;
+            font-size: 8pt; /* Ukuran font pratinjau 8pt */
+            line-height: 1.4;
             color: #1e2a3a;
         }
         .preview-box h1, .preview-box h2, .preview-box h3, .preview-box p, .preview-box ul, .preview-box ol, .preview-box table {
             margin-top: 0.3em;
             margin-bottom: 0.4em;
         }
-        .preview-box h1 { font-size: 13pt; color: #1a3c6e; }
-        .preview-box h2 { font-size: 11pt; color: #2a4c7e; border-bottom: 1px solid #d0d8e4; padding-bottom: 3px; }
-        .preview-box h3 { font-size: 9pt; font-weight: 700; }
-        .preview-box ul, .preview-box ol { padding-left: 20px; }
+        .preview-box h1 { font-size: 12pt; color: #1a3c6e; }
+        .preview-box h2 { font-size: 10pt; color: #2a4c7e; border-bottom: 1px solid #d0d8e4; padding-bottom: 2px; }
+        .preview-box h3 { font-size: 8pt; font-weight: 700; }
+        .preview-box ul, .preview-box ol { padding-left: 18px; }
         .preview-box table { border-collapse: collapse; width: 100%; margin: 6px 0; }
-        .preview-box th, .preview-box td { border: 1px solid #1a2a3a; padding: 4px 6px; vertical-align: top; text-align: left; }
+        .preview-box th, .preview-box td { border: 1px solid #1a2a3a; padding: 3px 5px; vertical-align: top; text-align: left; }
         .preview-box th { background: #e6f0fa; font-weight: 700; }
-        
-        @media (max-width: 720px) {
-            .container { padding: 12px; }
-            .action-row button { padding: 5px 10px; font-size: 12px; }
-        }
     </style>
 </head>
 <body>
@@ -222,7 +214,7 @@
                 <option value="markdown">Markdown (Konversi)</option>
             </select>
             <span class="mode-hint">
-                <i class="fas fa-info-circle"></i> Auto deteksi format
+                <i class="fas fa-info-circle"></i> Deteksi otomatis
             </span>
         </div>
         <!-- TEXTAREA -->
@@ -309,8 +301,8 @@ body {
     font-size: 9pt; /* Hasil unduh diset ke 9pt */
     color: #1e2a3a;
 }
-h1 { color: #1a3c6e; font-size: 14pt; }
-h2 { color: #2a4c7e; font-size: 11pt; border-bottom: 1px solid #ccc; padding-bottom: 3px; }
+h1 { color: #1a3c6e; font-size: 13pt; }
+h2 { color: #2a4c7e; font-size: 10pt; border-bottom: 1px solid #ccc; padding-bottom: 2px; }
 h3 { font-size: 9pt; font-weight: bold; }
 table { border-collapse: collapse; width: 100%; margin-top: 6px; }
 th { background-color: #e6f0fa; font-weight: bold; text-align: center; }

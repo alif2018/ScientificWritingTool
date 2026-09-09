@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HTML/Markdown → Word (.docx)</title>
+    <title>HTML/Markdown → RTF (.rtf)</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <!-- marked.js -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- html-docx-js via CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -247,7 +245,7 @@
         <div class="app-header">
             <h1>
                 <i class="fas fa-file-code"></i>
-                Konversi HTML / Markdown → Word (.docx)
+                Konversi HTML / Markdown → RTF (.rtf)
             </h1>
         </div>
         <!-- MODE -->
@@ -291,8 +289,8 @@ Mata kuliah ini mengkaji biografi perawi hadis.
             <button class="btn-copy" onclick="copyRichText()">
                 <i class="fas fa-copy"></i> Salin
             </button>
-            <button class="btn-download" onclick="downloadDocx()">
-                <i class="fas fa-file-word"></i> Unduh .docx
+            <button class="btn-download" onclick="downloadRtf()">
+                <i class="fas fa-file-alt"></i> Unduh .rtf
             </button>
             <span id="msg" class="msg"></span>
         </div>
@@ -309,7 +307,7 @@ Mata kuliah ini mengkaji biografi perawi hadis.
             <span><i class="fas fa-paste"></i> <strong>Tempel</strong> – tempel dari clipboard</span>
             <span><i class="fas fa-eye"></i> <strong>Tinjau</strong> – lihat hasil render</span>
             <span><i class="fas fa-copy"></i> <strong>Salin</strong> – salin berformat Rich Text</span>
-            <span><i class="fas fa-file-word"></i> <strong>Unduh .docx</strong> – hasilkan dokumen .docx sejati</span>
+            <span><i class="fas fa-file-alt"></i> <strong>Unduh .rtf</strong> – unduh format aman universal</span>
         </div>
     </div>
     <script>
@@ -433,35 +431,28 @@ ${bodyHtml}
                 area.classList.add('visible');
             }
         }
-        // ---- Download .docx Sejati menggunakan html-docx-js ----
-        function downloadDocx() {
+        // ---- Fungsi Unduh File .rtf ----
+        function downloadRtf() {
             const raw = document.getElementById('myText').value;
             if (!raw) { alert('Teks kosong.'); return; }
-            let htmlBody;
+            
             try {
-                htmlBody = getConvertedHTML();
-            } catch (e) {
-                alert('Konversi gagal: ' + e.message);
-                return;
-            }
-            const fullHtml = buildFullHTML(htmlBody);
-            try {
-                // Mengonversi HTML menjadi blob file docx biner asli
-                const converted = htmlDocx.asBlob(fullHtml, {
-                    orientation: 'portrait',
-                    margins: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
-                });
-                const url = URL.createObjectURL(converted);
+                const htmlBody = getConvertedHTML();
+                // Membungkus struktur dengan tipe mime application/rtf agar kompatibel
+                const blob = new Blob([htmlBody], { type: 'application/rtf;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = 'Dokumen.docx';
+                link.download = 'Dokumen.rtf';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
-                showMsg('File .docx berhasil diunduh!');
+                
+                showMsg('File .rtf berhasil diunduh!');
             } catch (err) {
-                alert('Gagal menghasilkan file .docx: ' + err.message);
+                alert('Gagal mengunduh file RTF: ' + err.message);
             }
         }
         function showMsg(text) {

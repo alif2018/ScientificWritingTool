@@ -4,18 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HTML/Markdown → Word</title>
-
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <!-- marked.js -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js">
     </script>
-
     <style>
         * {
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
             background: #f0f4f9;
@@ -26,7 +23,6 @@
             justify-content: center;
             align-items: flex-start;
         }
-
         .container {
             max-width: 1100px;
             width: 100%;
@@ -36,7 +32,6 @@
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
             transition: padding 0.2s;
         }
-
         /* HEADER */
         .app-header {
             display: flex;
@@ -59,7 +54,6 @@
             font-size: 26px;
             color: #1a3c6e;
         }
-
         /* MODE SELECTOR */
         .mode-bar {
             display: flex;
@@ -99,7 +93,6 @@
         .mode-hint i {
             color: #6a7f9a;
         }
-
         /* TEXTAREA */
         textarea {
             width: 100%;
@@ -121,7 +114,6 @@
             background: #ffffff;
             box-shadow: 0 0 0 4px rgba(26, 60, 110, 0.08);
         }
-
         /* ACTION ROW - HORIZONTAL, RESPONSIF */
         .action-row {
             display: flex;
@@ -131,7 +123,6 @@
             margin: 18px 0 16px 0;
             padding: 6px 0;
         }
-
         .action-row button {
             display: inline-flex;
             align-items: center;
@@ -154,7 +145,6 @@
             width: 18px;
             text-align: center;
         }
-
         .action-row button:hover {
             background: #dce6f2;
             transform: translateY(-1px);
@@ -162,8 +152,7 @@
         .action-row button:active {
             transform: scale(0.96);
         }
-
-        /* Warna khusus tombol (urutan: Tempel, Bersihkan, Salin, Tinjau, Unduh) */
+        /* Warna khusus tombol */
         .btn-paste {
             background: #e3eefa;
             color: #0d2f5a;
@@ -171,7 +160,6 @@
         .btn-paste:hover {
             background: #c8ddf5;
         }
-
         .btn-clear {
             background: #fce9e9;
             color: #b71c1c;
@@ -179,7 +167,6 @@
         .btn-clear:hover {
             background: #fad1d1;
         }
-
         .btn-copy {
             background: #e0f0e8;
             color: #1e5a3a;
@@ -187,7 +174,6 @@
         .btn-copy:hover {
             background: #c8e6d8;
         }
-
         .btn-preview {
             background: #e8ecf5;
             color: #2a4a7a;
@@ -195,7 +181,6 @@
         .btn-preview:hover {
             background: #d5dcee;
         }
-
         .btn-download {
             background: #1a3c6e;
             color: white;
@@ -204,7 +189,6 @@
         .btn-download:hover {
             background: #234e8a;
         }
-
         .action-row .msg {
             font-size: 15px;
             font-weight: 500;
@@ -213,7 +197,6 @@
             flex: 1 1 auto;
             min-width: 100px;
         }
-
         /* ===== PREVIEW LEBAR & SPASI ===== */
         .preview-area {
             margin-top: 18px;
@@ -227,7 +210,6 @@
         .preview-area.visible {
             display: block;
         }
-
         .preview-header {
             display: flex;
             align-items: center;
@@ -237,7 +219,6 @@
             color: #1a3c6e;
             margin-bottom: 12px;
         }
-
         .preview-box {
             background: white;
             padding: 24px 30px;
@@ -252,7 +233,6 @@
             line-height: 1.6;
             color: #1e2a3a;
         }
-
         .preview-box h1,
         .preview-box h2,
         .preview-box h3,
@@ -265,7 +245,6 @@
             margin-top: 0.4em;
             margin-bottom: 0.5em;
         }
-
         .preview-box h1 {
             font-size: 16pt;
             color: #1a3c6e;
@@ -280,7 +259,6 @@
             font-size: 11pt;
             font-weight: 700;
         }
-
         .preview-box ul,
         .preview-box ol {
             padding-left: 24px;
@@ -289,7 +267,6 @@
         .preview-box li {
             margin-bottom: 2px;
         }
-
         .preview-box table {
             border-collapse: collapse;
             width: 100%;
@@ -307,7 +284,6 @@
             background: #e6f0fa;
             font-weight: 700;
         }
-
         .preview-box blockquote {
             border-left: 4px solid #1a3c6e;
             padding-left: 14px;
@@ -315,7 +291,6 @@
             color: #2a3a4e;
             font-style: italic;
         }
-
         .preview-box code {
             background: #f0f2f5;
             padding: 1px 6px;
@@ -331,7 +306,6 @@
             font-size: 8.5pt;
             line-height: 1.5;
         }
-
         /* HINT */
         .hint {
             background: #f0f5fd;
@@ -352,7 +326,6 @@
         .hint strong {
             color: #1a3c6e;
         }
-
         /* RESPONSIVE */
         @media (max-width: 720px) {
             .container {
@@ -366,14 +339,6 @@
                 align-items: stretch;
                 gap: 8px;
             }
-            .mode-hint {
-                font-size: 13px;
-            }
-            textarea {
-                min-height: 200px;
-                font-size: 14px;
-                padding: 14px 16px;
-            }
             .action-row {
                 gap: 8px 10px;
                 justify-content: flex-start;
@@ -384,10 +349,6 @@
                 flex: 1 0 auto;
                 justify-content: center;
                 min-width: 70px;
-            }
-            .action-row button i {
-                font-size: 15px;
-                width: 16px;
             }
             .btn-download {
                 padding: 8px 20px;
@@ -404,22 +365,6 @@
                 max-height: 400px;
                 font-size: 9pt;
             }
-            .preview-box h1 {
-                font-size: 14pt;
-            }
-            .preview-box h2 {
-                font-size: 12pt;
-            }
-            .preview-box h3 {
-                font-size: 10.5pt;
-            }
-            .preview-box table {
-                font-size: 8.5pt;
-            }
-            .preview-box th,
-            .preview-box td {
-                padding: 4px 6px;
-            }
             .hint {
                 font-size: 13px;
                 padding: 12px 14px;
@@ -427,39 +372,10 @@
                 gap: 4px;
             }
         }
-
-        @media (max-width: 420px) {
-            .container {
-                padding: 12px 10px;
-            }
-            .action-row button {
-                font-size: 13px;
-                padding: 7px 10px;
-                gap: 5px;
-            }
-            .action-row button i {
-                font-size: 14px;
-            }
-            .app-header h1 {
-                font-size: 18px;
-            }
-            .mode-bar select {
-                font-size: 13px;
-                padding: 5px 10px;
-            }
-            .preview-box {
-                padding: 12px 14px;
-                max-height: 340px;
-                font-size: 8.5pt;
-            }
-        }
     </style>
 </head>
-
 <body>
-
     <div class="container">
-
         <!-- HEADER -->
         <div class="app-header">
             <h1>
@@ -467,7 +383,6 @@
                 Konversi HTML / Markdown → Word
             </h1>
         </div>
-
         <!-- MODE -->
         <div class="mode-bar">
             <label for="modeSelect">
@@ -483,21 +398,19 @@
                 Auto: deteksi HTML atau Markdown
             </span>
         </div>
-
         <!-- TEXTAREA -->
         <textarea id="myText" spellcheck="false"># RPS Mata Kuliah Ilmu Rijal Hadis
-
 ## Deskripsi
 Mata kuliah ini mengkaji biografi perawi hadis.
-
 ## Tabel Pertemuan
-| Minggu | Materi | Bobot |
-|--------|--------|-------|
-| 1      | Kontrak Kuliah | 0% |
-| 2      | Definisi Ilmu Rijal | 2% |
-| 3      | Sejarah Perkembangan | 3% |</textarea>
 
-        <!-- ACTION ROW (urutan: Tempel, Bersihkan, Salin, Tinjau, Unduh) -->
+| Minggu | Materi | Bobot |
+| :--- | :--- | :--- |
+| 1 | Kontrak Kuliah | 0% |
+| 2 | Definisi Ilmu Rijal | 2% |
+| 3 | Sejarah Perkembangan | 3% | </textarea>
+
+        <!-- ACTION ROW -->
         <div class="action-row">
             <button class="btn-clear" onclick="clearAll()">
                 <i class="fas fa-eraser"></i> Bersihkan
@@ -505,18 +418,17 @@ Mata kuliah ini mengkaji biografi perawi hadis.
             <button class="btn-paste" onclick="pasteFromClipboard()">
                 <i class="fas fa-paste"></i> Tempel
             </button>
-            </button>
             <button class="btn-preview" onclick="togglePreview()">
                 <i class="fas fa-eye"></i> Tinjau
             </button>
-            <button class="btn-copy" onclick="copyText()">
+            <button class="btn-copy" onclick="copyRichText()">
                 <i class="fas fa-copy"></i> Salin
+            </button>
             <button class="btn-download" onclick="downloadDoc()">
                 <i class="fas fa-file-word"></i> Unduh
             </button>
             <span id="msg" class="msg"></span>
         </div>
-
         <!-- PREVIEW -->
         <div id="previewArea" class="preview-area">
             <div class="preview-header">
@@ -524,34 +436,28 @@ Mata kuliah ini mengkaji biografi perawi hadis.
             </div>
             <div id="previewBox" class="preview-box"></div>
         </div>
-
-        <!-- HINT (diperbarui sesuai urutan tombol) -->
+        <!-- HINT -->
         <div class="hint">
             <span><i class="fas fa-eraser"></i> <strong>Bersihkan</strong> – bersihkan input area teks</span>
             <span><i class="fas fa-lightbulb"></i> <strong>Tempel</strong> – tempel teks dari clipboard</span>
             <span><i class="fas fa-eye"></i> <strong>Tinjau</strong> – lihat hasil render</span>
-            <span><i class="fas fa-copy"></i> <strong>Salin</strong> – salin teks docx ke clipboard</span>
-            <span><i class="fas fa-file-word"></i> <strong>Unduh</strong> – unduh format.doc</span>
+            <span><i class="fas fa-copy"></i> <strong>Salin</strong> – salin sebagai Rich Text (bisa langsung paste berformat ke Word/Docs)</span>
+            <span><i class="fas fa-file-word"></i> <strong>Unduh</strong> – unduh format .doc yang kompatibel di PC/HP</span>
         </div>
-
     </div>
-
     <script>
         // ---- marked.js config ----
         marked.setOptions({ tables: true, breaks: true, gfm: true });
-
         // ---- Get converted HTML ----
         function getConvertedHTML() {
             const raw = document.getElementById('myText').value;
             const mode = document.getElementById('modeSelect').value;
             let htmlContent = raw;
-
             if (mode === 'markdown') {
                 htmlContent = marked.parse(raw);
             } else if (mode === 'html') {
                 htmlContent = raw;
             } else {
-                // Auto detect
                 const trimmed = raw.trim();
                 const htmlTags = ['<html', '<table', '<div', '<p>', '<h1', '<h2', '<h3', '<ul', '<ol', '<body'];
                 let isHtml = false;
@@ -562,10 +468,8 @@ Mata kuliah ini mengkaji biografi perawi hadis.
                     }
                 }
                 if (!isHtml) {
-                    // cek markdown table
                     const lines = trimmed.split('\n');
-                    let hasPipe = false,
-                        hasDash = false;
+                    let hasPipe = false, hasDash = false;
                     for (let line of lines) {
                         if (line.includes('|')) hasPipe = true;
                         if (line.includes('---') || line.includes('--')) hasDash = true;
@@ -577,34 +481,79 @@ Mata kuliah ini mengkaji biografi perawi hadis.
             }
             return htmlContent;
         }
-
-        // ---- Build full HTML for Word (dengan Aptos 9pt) ----
+        // ---- Build full HTML for Word (Compatibility Standard) ----
         function buildWordHTML(bodyHtml) {
             return `<!DOCTYPE html>
-        <html>
-        <head><meta charset="UTF-8">
-        <style>
-        body {
-            font-family: 'Aptos', 'Segoe UI', Arial, sans-serif;
-            font-size: 9pt;
-            margin: 30px;
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="UTF-8">
+<!--[if gte mso 9]>
+<xml>
+<w:WordDocument>
+<w:View>Print</w:View>
+<w:TrackMoves>false</w:TrackMoves>
+<w:TrackFormatting/>
+<w:PunctuationKerning/>
+<w:ValidateAgainstSchemas/>
+<w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+<w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+<w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+<w:DoNotPromoteQF/>
+<w:LidThemeOther>EN-US</w:LidThemeOther>
+<w:LidThemeAsian>X-NONE</w:LidThemeAsian>
+<w:LidThemeComplexScript>AR-SA</w:LidThemeComplexScript>
+<w:Compatibility>
+<w:BreakWrappedTables/>
+<w:SnapToGridInCell/>
+<w:WrapTextWithP3/>
+<w:UseAsianBreakRules/>
+<w:DontGrowAutofit/>
+<w:SplitPgBreakAndParaMark/>
+<w:EnableOpenTypeKerning/>
+<w:DontFlipMirrorIndents/>
+<w:OverrideTableStyleHps/>
+</w:Compatibility>
+<w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+<m:mathPr>
+<m:mathFont m:val="Cambria Math"/>
+<m:brkBin m:val="before"/>
+<m:brkBinSub m:val="--"/>
+<m:smallFrac m:val="off"/>
+<m:dispDef/>
+<m:lwdLink m:val="none"/>
+<m:alrightm/>
+<m:verso>
+<m:spaceAtM/></m:verso>
+<m:h5Capt/>
+<m:drktFaz/>
+<m:crinkles/>
+<m:highlght/>
+</m:mathPr>
+</w:WordDocument>
+</xml>
+<![endif]-->
+<style>
+body {
+    font-family: 'Aptos', 'Segoe UI', Arial, sans-serif;
+    font-size: 11pt;
+    margin: 30px;
+    color: #1e2a3a;
+}
+h1 { color: #1a3c6e; font-size: 16pt; }
+h2 { color: #2a4c7e; font-size: 13pt; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+h3 { font-size: 11pt; font-weight: bold; }
+table { border-collapse: collapse; width: 100%; margin-top: 8px; }
+th { background-color: #e6f0fa; font-weight: bold; text-align: center; }
+th, td { border: 1px solid #000000; padding: 6px 8px; vertical-align: top; }
+ul, ol { margin-top: 4px; margin-bottom: 4px; padding-left: 24px; }
+p { margin-top: 4px; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+${bodyHtml}
+</body>
+</html>`;
         }
-        h1 { color: #1a3c6e; font-size: 16pt; }
-        h2 { color: #2a4c7e; font-size: 13pt; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
-        h3 { font-size: 11pt; font-weight: bold; }
-        table { border-collapse: collapse; width: 100%; margin-top: 8px; }
-        th { background-color: #e6f0fa; font-weight: bold; text-align: center; }
-        th, td { border: 1px solid #000000; padding: 5px 8px; vertical-align: top; }
-        ul, ol { margin-top: 4px; margin-bottom: 4px; padding-left: 24px; }
-        p { text-align: justify; margin-top: 4px; margin-bottom: 4px; }
-        </style>
-        </head>
-        <body>
-        ${bodyHtml}
-        </body>
-        </html>`;
-        }
-
         // ---- Paste from clipboard ----
         function pasteFromClipboard() {
             if (!navigator.clipboard) {
@@ -620,7 +569,6 @@ Mata kuliah ini mengkaji biografi perawi hadis.
                     alert('Gagal membaca clipboard. Pastikan izin diberikan atau gunakan Ctrl+V.');
                 });
         }
-
         // ---- Clear All ----
         function clearAll() {
             document.getElementById('myText').value = '';
@@ -631,16 +579,34 @@ Mata kuliah ini mengkaji biografi perawi hadis.
             }
             showMsg('Area dibersihkan');
         }
-
-        // ---- Copy Text ----
-        function copyText() {
-            const text = document.getElementById('myText').value;
-            if (!text) { alert('Teks kosong.'); return; }
-            navigator.clipboard.writeText(text)
-                .then(() => showMsg('Teks disalin!'))
-                .catch(() => alert('Gagal copy. Gunakan Ctrl+C.'));
+        // ---- Copy as Rich Text (HTML) ----
+        async function copyRichText() {
+            const raw = document.getElementById('myText').value;
+            if (!raw) { alert('Teks kosong.'); return; }
+            
+            try {
+                const htmlBody = getConvertedHTML();
+                const fullHtml = buildWordHTML(htmlBody);
+                
+                // Buat versi plain text darurat sebagai fallback
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = htmlBody;
+                const plainText = tempDiv.textContent || tempDiv.innerText || raw;
+                if (navigator.clipboard && window.ClipboardItem) {
+                    const clipboardItem = new ClipboardItem({
+                        'text/html': new Blob([fullHtml], { type: 'text/html' }),
+                        'text/plain': new Blob([plainText], { type: 'text/plain' })
+                    });
+                    await navigator.clipboard.write([clipboardItem]);
+                    showMsg('Berhasil disalin sebagai Rich Text! Paste ke Word/Docs.');
+                } else {
+                    await navigator.clipboard.writeText(plainText);
+                    showMsg('Disalin sebagai teks biasa (Browser tidak mendukung Rich Text).');
+                }
+            } catch (e) {
+                alert('Gagal menyalin: ' + e.message);
+            }
         }
-
         // ---- Toggle Preview ----
         function togglePreview() {
             const area = document.getElementById('previewArea');
@@ -660,7 +626,6 @@ Mata kuliah ini mengkaji biografi perawi hadis.
                 showMsg('Error saat tinjau');
             }
         }
-
         // ---- Download .doc ----
         function downloadDoc() {
             const raw = document.getElementById('myText').value;
@@ -673,18 +638,17 @@ Mata kuliah ini mengkaji biografi perawi hadis.
                 return;
             }
             const fullHtml = buildWordHTML(htmlBody);
-            const blob = new Blob([fullHtml], { type: 'application/msword' });
+            const blob = new Blob(['\ufeff' + fullHtml], { type: 'application/msword;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'RPS.doc';
+            link.download = 'Dokumen.doc';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
-            showMsg('RPS.doc berhasil diunduh!');
+            showMsg('Dokumen.doc berhasil diunduh!');
         }
-
         // ---- Notification ----
         function showMsg(text) {
             const el = document.getElementById('msg');
@@ -693,6 +657,5 @@ Mata kuliah ini mengkaji biografi perawi hadis.
             el._timer = setTimeout(() => { el.textContent = ''; }, 4500);
         }
     </script>
-
 </body>
 </html>

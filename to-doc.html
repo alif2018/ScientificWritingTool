@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HTML/Markdown → Word</title>
+    <title>HTML/Markdown → Word (.docx)</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <!-- marked.js -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- html-docx-js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -114,7 +115,7 @@
             background: #ffffff;
             box-shadow: 0 0 0 4px rgba(26, 60, 110, 0.08);
         }
-        /* ACTION ROW - HORIZONTAL, RESPONSIF */
+        /* ACTION ROW */
         .action-row {
             display: flex;
             flex-wrap: wrap;
@@ -152,43 +153,16 @@
         .action-row button:active {
             transform: scale(0.96);
         }
-        /* Warna khusus tombol */
-        .btn-paste {
-            background: #e3eefa;
-            color: #0d2f5a;
-        }
-        .btn-paste:hover {
-            background: #c8ddf5;
-        }
-        .btn-clear {
-            background: #fce9e9;
-            color: #b71c1c;
-        }
-        .btn-clear:hover {
-            background: #fad1d1;
-        }
-        .btn-copy {
-            background: #e0f0e8;
-            color: #1e5a3a;
-        }
-        .btn-copy:hover {
-            background: #c8e6d8;
-        }
-        .btn-preview {
-            background: #e8ecf5;
-            color: #2a4a7a;
-        }
-        .btn-preview:hover {
-            background: #d5dcee;
-        }
-        .btn-download {
-            background: #1a3c6e;
-            color: white;
-            padding: 10px 28px;
-        }
-        .btn-download:hover {
-            background: #234e8a;
-        }
+        .btn-paste { background: #e3eefa; color: #0d2f5a; }
+        .btn-paste:hover { background: #c8ddf5; }
+        .btn-clear { background: #fce9e9; color: #b71c1c; }
+        .btn-clear:hover { background: #fad1d1; }
+        .btn-copy { background: #e0f0e8; color: #1e5a3a; }
+        .btn-copy:hover { background: #c8e6d8; }
+        .btn-preview { background: #e8ecf5; color: #2a4a7a; }
+        .btn-preview:hover { background: #d5dcee; }
+        .btn-download { background: #1a3c6e; color: white; padding: 10px 28px; }
+        .btn-download:hover { background: #234e8a; }
         .action-row .msg {
             font-size: 15px;
             font-weight: 500;
@@ -197,7 +171,7 @@
             flex: 1 1 auto;
             min-width: 100px;
         }
-        /* ===== PREVIEW LEBAR & SPASI ===== */
+        /* PREVIEW AREA */
         .preview-area {
             margin-top: 18px;
             border: 2px dashed #b8cce0;
@@ -233,79 +207,17 @@
             line-height: 1.6;
             color: #1e2a3a;
         }
-        .preview-box h1,
-        .preview-box h2,
-        .preview-box h3,
-        .preview-box h4,
-        .preview-box p,
-        .preview-box ul,
-        .preview-box ol,
-        .preview-box table,
-        .preview-box blockquote {
+        .preview-box h1, .preview-box h2, .preview-box h3, .preview-box p, .preview-box ul, .preview-box ol, .preview-box table {
             margin-top: 0.4em;
             margin-bottom: 0.5em;
         }
-        .preview-box h1 {
-            font-size: 16pt;
-            color: #1a3c6e;
-        }
-        .preview-box h2 {
-            font-size: 13pt;
-            color: #2a4c7e;
-            border-bottom: 1px solid #d0d8e4;
-            padding-bottom: 4px;
-        }
-        .preview-box h3 {
-            font-size: 11pt;
-            font-weight: 700;
-        }
-        .preview-box ul,
-        .preview-box ol {
-            padding-left: 24px;
-            margin-bottom: 0.5em;
-        }
-        .preview-box li {
-            margin-bottom: 2px;
-        }
-        .preview-box table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 8px 0;
-            font-size: 9pt;
-        }
-        .preview-box th,
-        .preview-box td {
-            border: 1.5px solid #1a2a3a;
-            padding: 5px 8px;
-            vertical-align: top;
-            text-align: left;
-        }
-        .preview-box th {
-            background: #e6f0fa;
-            font-weight: 700;
-        }
-        .preview-box blockquote {
-            border-left: 4px solid #1a3c6e;
-            padding-left: 14px;
-            margin-left: 8px;
-            color: #2a3a4e;
-            font-style: italic;
-        }
-        .preview-box code {
-            background: #f0f2f5;
-            padding: 1px 6px;
-            border-radius: 4px;
-            font-size: 0.9em;
-        }
-        .preview-box pre {
-            background: #f0f2f5;
-            padding: 10px 14px;
-            border-radius: 8px;
-            overflow-x: auto;
-            border: 1px solid #dde4ed;
-            font-size: 8.5pt;
-            line-height: 1.5;
-        }
+        .preview-box h1 { font-size: 16pt; color: #1a3c6e; }
+        .preview-box h2 { font-size: 13pt; color: #2a4c7e; border-bottom: 1px solid #d0d8e4; padding-bottom: 4px; }
+        .preview-box h3 { font-size: 11pt; font-weight: 700; }
+        .preview-box ul, .preview-box ol { padding-left: 24px; }
+        .preview-box table { border-collapse: collapse; width: 100%; margin: 8px 0; }
+        .preview-box th, .preview-box td { border: 1.5px solid #1a2a3a; padding: 5px 8px; vertical-align: top; text-align: left; }
+        .preview-box th { background: #e6f0fa; font-weight: 700; }
         /* HINT */
         .hint {
             background: #f0f5fd;
@@ -319,58 +231,13 @@
             flex-wrap: wrap;
             gap: 6px 20px;
         }
-        .hint i {
-            color: #1a3c6e;
-            width: 20px;
-        }
-        .hint strong {
-            color: #1a3c6e;
-        }
-        /* RESPONSIVE */
+        .hint i { color: #1a3c6e; width: 20px; }
+        .hint strong { color: #1a3c6e; }
         @media (max-width: 720px) {
-            .container {
-                padding: 16px 14px;
-            }
-            .app-header h1 {
-                font-size: 20px;
-            }
-            .mode-bar {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 8px;
-            }
-            .action-row {
-                gap: 8px 10px;
-                justify-content: flex-start;
-            }
-            .action-row button {
-                padding: 8px 14px;
-                font-size: 14px;
-                flex: 1 0 auto;
-                justify-content: center;
-                min-width: 70px;
-            }
-            .btn-download {
-                padding: 8px 20px;
-                flex: 1 0 auto;
-            }
-            .action-row .msg {
-                font-size: 14px;
-                flex: 0 0 100%;
-                text-align: left;
-                margin-left: 0;
-            }
-            .preview-box {
-                padding: 16px 18px;
-                max-height: 400px;
-                font-size: 9pt;
-            }
-            .hint {
-                font-size: 13px;
-                padding: 12px 14px;
-                flex-direction: column;
-                gap: 4px;
-            }
+            .container { padding: 16px 14px; }
+            .action-row button { padding: 8px 14px; font-size: 14px; flex: 1 0 auto; justify-content: center; }
+            .btn-download { padding: 8px 20px; }
+            .hint { flex-direction: column; gap: 4px; }
         }
     </style>
 </head>
@@ -380,7 +247,7 @@
         <div class="app-header">
             <h1>
                 <i class="fas fa-file-code"></i>
-                Konversi HTML / Markdown → Word
+                Konversi HTML / Markdown → Word (.docx)
             </h1>
         </div>
         <!-- MODE -->
@@ -424,8 +291,8 @@ Mata kuliah ini mengkaji biografi perawi hadis.
             <button class="btn-copy" onclick="copyRichText()">
                 <i class="fas fa-copy"></i> Salin
             </button>
-            <button class="btn-download" onclick="downloadDoc()">
-                <i class="fas fa-file-word"></i> Unduh
+            <button class="btn-download" onclick="downloadDocx()">
+                <i class="fas fa-file-word"></i> Unduh .docx
             </button>
             <span id="msg" class="msg"></span>
         </div>
@@ -438,17 +305,15 @@ Mata kuliah ini mengkaji biografi perawi hadis.
         </div>
         <!-- HINT -->
         <div class="hint">
-            <span><i class="fas fa-eraser"></i> <strong>Bersihkan</strong> – bersihkan input area teks</span>
-            <span><i class="fas fa-lightbulb"></i> <strong>Tempel</strong> – tempel teks dari clipboard</span>
+            <span><i class="fas fa-eraser"></i> <strong>Bersihkan</strong> – bersihkan area teks</span>
+            <span><i class="fas fa-paste"></i> <strong>Tempel</strong> – tempel dari clipboard</span>
             <span><i class="fas fa-eye"></i> <strong>Tinjau</strong> – lihat hasil render</span>
-            <span><i class="fas fa-copy"></i> <strong>Salin</strong> – salin sebagai Rich Text (bisa langsung paste berformat ke Word/Docs)</span>
-            <span><i class="fas fa-file-word"></i> <strong>Unduh</strong> – unduh format .doc yang kompatibel di PC/HP</span>
+            <span><i class="fas fa-copy"></i> <strong>Salin</strong> – salin berformat Rich Text</span>
+            <span><i class="fas fa-file-word"></i> <strong>Unduh .docx</strong> – hasilkan dokumen .docx sejati</span>
         </div>
     </div>
     <script>
-        // ---- marked.js config ----
         marked.setOptions({ tables: true, breaks: true, gfm: true });
-        // ---- Get converted HTML ----
         function getConvertedHTML() {
             const raw = document.getElementById('myText').value;
             const mode = document.getElementById('modeSelect').value;
@@ -481,62 +346,15 @@ Mata kuliah ini mengkaji biografi perawi hadis.
             }
             return htmlContent;
         }
-        // ---- Build full HTML for Word (Compatibility Standard) ----
-        function buildWordHTML(bodyHtml) {
+        function buildFullHTML(bodyHtml) {
             return `<!DOCTYPE html>
-<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<html>
 <head>
 <meta charset="UTF-8">
-<!--[if gte mso 9]>
-<xml>
-<w:WordDocument>
-<w:View>Print</w:View>
-<w:TrackMoves>false</w:TrackMoves>
-<w:TrackFormatting/>
-<w:PunctuationKerning/>
-<w:ValidateAgainstSchemas/>
-<w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
-<w:IgnoreMixedContent>false</w:IgnoreMixedContent>
-<w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
-<w:DoNotPromoteQF/>
-<w:LidThemeOther>EN-US</w:LidThemeOther>
-<w:LidThemeAsian>X-NONE</w:LidThemeAsian>
-<w:LidThemeComplexScript>AR-SA</w:LidThemeComplexScript>
-<w:Compatibility>
-<w:BreakWrappedTables/>
-<w:SnapToGridInCell/>
-<w:WrapTextWithP3/>
-<w:UseAsianBreakRules/>
-<w:DontGrowAutofit/>
-<w:SplitPgBreakAndParaMark/>
-<w:EnableOpenTypeKerning/>
-<w:DontFlipMirrorIndents/>
-<w:OverrideTableStyleHps/>
-</w:Compatibility>
-<w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
-<m:mathPr>
-<m:mathFont m:val="Cambria Math"/>
-<m:brkBin m:val="before"/>
-<m:brkBinSub m:val="--"/>
-<m:smallFrac m:val="off"/>
-<m:dispDef/>
-<m:lwdLink m:val="none"/>
-<m:alrightm/>
-<m:verso>
-<m:spaceAtM/></m:verso>
-<m:h5Capt/>
-<m:drktFaz/>
-<m:crinkles/>
-<m:highlght/>
-</m:mathPr>
-</w:WordDocument>
-</xml>
-<![endif]-->
 <style>
 body {
-    font-family: 'Aptos', 'Segoe UI', Arial, sans-serif;
+    font-family: 'Segoe UI', Arial, sans-serif;
     font-size: 11pt;
-    margin: 30px;
     color: #1e2a3a;
 }
 h1 { color: #1a3c6e; font-size: 16pt; }
@@ -554,10 +372,9 @@ ${bodyHtml}
 </body>
 </html>`;
         }
-        // ---- Paste from clipboard ----
         function pasteFromClipboard() {
             if (!navigator.clipboard) {
-                alert('Clipboard API tidak tersedia. Gunakan Ctrl+V manual.');
+                alert('Clipboard API tidak tersedia.');
                 return;
             }
             navigator.clipboard.readText()
@@ -565,11 +382,8 @@ ${bodyHtml}
                     document.getElementById('myText').value = text;
                     showMsg('Teks dari clipboard ditempelkan');
                 })
-                .catch(() => {
-                    alert('Gagal membaca clipboard. Pastikan izin diberikan atau gunakan Ctrl+V.');
-                });
+                .catch(() => alert('Gagal membaca clipboard.'));
         }
-        // ---- Clear All ----
         function clearAll() {
             document.getElementById('myText').value = '';
             const area = document.getElementById('previewArea');
@@ -579,16 +393,12 @@ ${bodyHtml}
             }
             showMsg('Area dibersihkan');
         }
-        // ---- Copy as Rich Text (HTML) ----
         async function copyRichText() {
             const raw = document.getElementById('myText').value;
             if (!raw) { alert('Teks kosong.'); return; }
-            
             try {
                 const htmlBody = getConvertedHTML();
-                const fullHtml = buildWordHTML(htmlBody);
-                
-                // Buat versi plain text darurat sebagai fallback
+                const fullHtml = buildFullHTML(htmlBody);
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = htmlBody;
                 const plainText = tempDiv.textContent || tempDiv.innerText || raw;
@@ -598,16 +408,15 @@ ${bodyHtml}
                         'text/plain': new Blob([plainText], { type: 'text/plain' })
                     });
                     await navigator.clipboard.write([clipboardItem]);
-                    showMsg('Berhasil disalin sebagai Rich Text! Paste ke Word/Docs.');
+                    showMsg('Berhasil disalin sebagai Rich Text!');
                 } else {
                     await navigator.clipboard.writeText(plainText);
-                    showMsg('Disalin sebagai teks biasa (Browser tidak mendukung Rich Text).');
+                    showMsg('Disalin sebagai teks biasa.');
                 }
             } catch (e) {
                 alert('Gagal menyalin: ' + e.message);
             }
         }
-        // ---- Toggle Preview ----
         function togglePreview() {
             const area = document.getElementById('previewArea');
             const box = document.getElementById('previewBox');
@@ -616,18 +425,16 @@ ${bodyHtml}
                 return;
             }
             try {
-                const html = getConvertedHTML();
-                box.innerHTML = html;
+                box.innerHTML = getConvertedHTML();
                 area.classList.add('visible');
                 showMsg('Tinjauan diperbarui');
             } catch (e) {
-                box.innerHTML = `<p style="color:#b71c1c;"><i class="fas fa-exclamation-triangle"></i> Error: ${e.message}</p>`;
+                box.innerHTML = `<p style="color:#b71c1c;">Error: ${e.message}</p>`;
                 area.classList.add('visible');
-                showMsg('Error saat tinjau');
             }
         }
-        // ---- Download .doc ----
-        function downloadDoc() {
+        // ---- Download .docx Sejati menggunakan html-docx-js ----
+        function downloadDocx() {
             const raw = document.getElementById('myText').value;
             if (!raw) { alert('Teks kosong.'); return; }
             let htmlBody;
@@ -637,19 +444,26 @@ ${bodyHtml}
                 alert('Konversi gagal: ' + e.message);
                 return;
             }
-            const fullHtml = buildWordHTML(htmlBody);
-            const blob = new Blob(['\ufeff' + fullHtml], { type: 'application/msword;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'Dokumen.doc';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            showMsg('Dokumen.doc berhasil diunduh!');
+            const fullHtml = buildFullHTML(htmlBody);
+            try {
+                // Mengonversi HTML menjadi blob file docx biner asli
+                const converted = htmlDocx.asBlob(fullHtml, {
+                    orientation: 'portrait',
+                    margins: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
+                });
+                const url = URL.createObjectURL(converted);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'Dokumen.docx';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                showMsg('File .docx berhasil diunduh!');
+            } catch (err) {
+                alert('Gagal menghasilkan file .docx: ' + err.message);
+            }
         }
-        // ---- Notification ----
         function showMsg(text) {
             const el = document.getElementById('msg');
             el.textContent = text;

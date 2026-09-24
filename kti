@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Kelas Menulis — Artikel Ilmiah</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f3ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#1e1b4b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .slide.active {
+            display: block;
+            opacity: 1;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c5c7d0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans h-screen flex flex-col justify-between overflow-hidden select-none">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700/60 px-6 py-3 flex justify-between items-center z-20">
+        <div class="flex items-center gap-3">
+            <div class="bg-indigo-600 text-white p-2 rounded-lg text-sm font-bold flex items-center justify-center">
+                <i class="fa-solid me-1 fa-book-open"></i> RMC 2.0
+            </div>
+            <span class="font-semibold text-slate-200 text-sm md:text-base hidden sm:inline">Modul Kelas Menulis Artikel Ilmiah</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="text-xs md:text-sm font-medium text-slate-400 bg-slate-900/60 px-3 py-1.5 rounded-full border border-slate-700">
+                Slide <span id="current-slide" class="text-indigo-400 font-bold">1</span> dari <span id="total-slides">12</span>
+            </span>
+            <button onclick="toggleOverview()" class="text-slate-300 hover:text-white bg-slate-700 hover:bg-slate-600 p-2 rounded-lg text-sm transition" title="Lihat Semua Slide">
+                <i class="fa-solid fa-grid-2"></i> Grid
+            </button>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="w-full bg-slate-800 h-1.5">
+        <div id="progress-bar" class="bg-indigo-500 h-1.5 transition-all duration-300" style="width: 8.33%;"></div>
+    </div>
+
+    <!-- Main Container / Slide Viewport -->
+    <main class="flex-1 relative overflow-y-auto custom-scrollbar p-4 md:p-8 flex items-center justify-center">
+        <div class="w-full max-w-6xl mx-auto">
+
+            <!-- SLIDE 1 -->
+            <div class="slide active">
+                <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-6 md:p-10 shadow-2xl space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-700 pb-4">
+                        <span class="text-xs uppercase tracking-widest text-indigo-400 font-bold">Slide 01</span>
+                        <span class="bg-indigo-500/10 text-indigo-400 text-xs px-3 py-1 rounded-full font-semibold border border-indigo-500/20">Konstruksi Dasar</span>
+                    </div>
+                    <h1 class="text-2xl md:text-4xl font-extrabold text-white">Struktur Artikel Ilmiah & Prosedur Menulis</h1>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Left Box -->
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700/80 space-y-3">
+                            <h3 class="text-lg font-bold text-indigo-300 flex items-center gap-2">
+                                <i class="fa-solid fa-cubes"></i> Struktur Umum (IMRAD)
+                            </h3>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-slate-300">
+                                <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700/50"><strong class="text-indigo-400">I</strong>ntroduction</div>
+                                <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700/50"><strong class="text-indigo-400">M</strong>ethod</div>
+                                <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700/50"><strong class="text-indigo-400">R</strong>esults</div>
+                                <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700/50"><strong class="text-indigo-400">A</strong>nd <strong class="text-indigo-400">D</strong>iscussion</div>
+                            </div>
+                            
+                            <h4 class="text-sm font-semibold text-slate-200 pt-2">Komponen Lengkap:</h4>
+                            <ul class="text-xs md:text-sm text-slate-400 space-y-1 list-disc list-inside">
+                                <li>Judul, Nama Penulis, Afiliasi, Email</li>
+                                <li>Abstrak & Kata Kunci</li>
+                                <li>Pendahuluan (Latar Belakang, Formula, Kerangka, Tinjauan)</li>
+                                <li>Metode Penelitian & Hasil/Pembahasan</li>
+                                <li>Kesimpulan & Daftar Pustaka</li>
+                            </ul>
+                        </div>
+
+                        <!-- Right Box -->
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700/80 space-y-3">
+                            <h3 class="text-lg font-bold text-emerald-400 flex items-center gap-2">
+                                <i class="fa-solid fa-route"></i> Urutan Penulisan (Prosedur)
+                            </h3>
+                            <p class="text-xs text-slate-400">Urutan eksekusi ideal tidak dimulai dari kalimat pertama pendahuluan:</p>
+                            <div class="flex flex-wrap gap-1.5 text-xs">
+                                <span class="bg-emerald-900/40 text-emerald-300 px-2.5 py-1 rounded border border-emerald-700/40 font-medium">1. Topik</span>
+                                <span class="text-slate-500 self-center">→</span>
+                                <span class="bg-indigo-900/40 text-indigo-300 px-2.5 py-1 rounded border border-indigo-700/40 font-medium">2. Tahap 11 (Abstrak)</span>
+                                <span class="text-slate-500 self-center">→</span>
+                                <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700 font-medium">3. Tahap 5 (Latar Belakang)</span>
+                                <span class="text-slate-500 self-center">→</span>
+                                <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700 font-medium">4. Tahap 2 (P. Terdahulu)</span>
+                                <span class="text-slate-500 self-center">→</span>
+                                <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700 font-medium">5. Tahap 3 (Kerangka)</span>
+                                <span class="text-slate-500 self-center">→</span>
+                                <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700 font-medium">6. Tahap 6 (Tinjauan)</span>
+                                <span class="text-slate-500 self-center">→</span>
+                                <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700 font-medium">7. Tahap 4 (Metode)</span>
+                                <span class="text-slate-500 self-center">→</span>
+                                <span class="bg-purple-900/40 text-purple-300 px-2.5 py-1 rounded border border-purple-700/40 font-medium">8. Tahap 7-9 (Hasil/Pemb.)</span>
+                                <span class="text-slate-500 self-center">→</span>
+                                <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700 font-medium">9. Tahap 10 (Simpulan)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 2 -->
+            <div class="slide">
+                <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-6 md:p-10 shadow-2xl space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+                        <span class="text-xs uppercase tracking-widest text-indigo-400 font-bold">Slide 02</span>
+                        <span class="bg-indigo-500/10 text-indigo-400 text-xs px-3 py-1 rounded-full font-semibold border border-indigo-500/20">Canvas Perencanaan</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white">Research Modul Canvas (DR. GIN RMC 2.0)</h2>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs md:text-sm text-slate-300 border-collapse border border-slate-700">
+                            <thead>
+                                <tr class="bg-slate-900 text-indigo-300">
+                                    <th class="p-2.5 border border-slate-700 w-1/4">Komponen Canvas</th>
+                                    <th class="p-2.5 border border-slate-700">Deskripsi & Elemen Verifikasi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-700">
+                                <tr class="bg-slate-800/40">
+                                    <td class="p-2.5 font-bold text-slate-200 border border-slate-700">Topik</td>
+                                    <td class="p-2.5 border border-slate-700">☐ Sesuai Prodi &nbsp; ☐ Sesuai Riset Terkini &nbsp; ☐ Sesuai Kompetensi Dosen</td>
+                                </tr>
+                                <tr class="bg-slate-800/20">
+                                    <td class="p-2.5 font-bold text-slate-200 border border-slate-700">Masalah & Gap</td>
+                                    <td class="p-2.5 border border-slate-700">☐ Fenomena Gap &nbsp; ☐ Riset Gap &nbsp; | &nbsp; <span class="italic text-slate-400">Problem Statement</span></td>
+                                </tr>
+                                <tr class="bg-slate-800/40">
+                                    <td class="p-2.5 font-bold text-slate-200 border border-slate-700">Tujuan & Teori</td>
+                                    <td class="p-2.5 border border-slate-700">Tujuan spesifik (1, 2) + Teori Utama (Pencetus, Tahun, Asumsi Dasar)</td>
+                                </tr>
+                                <tr class="bg-slate-800/20">
+                                    <td class="p-2.5 font-bold text-slate-200 border border-slate-700">Kebaruan & Metode</td>
+                                    <td class="p-2.5 border border-slate-700">Orisinalitas/Kontribusi Baru + Pendekatan & Teknik Pengumpulan Data</td>
+                                </tr>
+                                <tr class="bg-slate-800/40">
+                                    <td class="p-2.5 font-bold text-indigo-300 border border-slate-700">Pola Judul Skripsi</td>
+                                    <td class="p-2.5 border border-slate-700">
+                                        • <strong>Pola KTM:</strong> Kebaruan, Topik & Masalah<br>
+                                        • <strong>Pola TTM:</strong> Tujuan, Topik & Metode
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-xs text-slate-400 bg-slate-900/50 p-3 rounded-lg border border-slate-700/60 flex items-center gap-2">
+                        <i class="fa-brands fa-youtube text-red-400"></i>
+                        <span>Dilengkapi tutorial pendukung di Instagram Reel (1-4), TikTok (1-2), dan YouTube (1-3).</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 3 -->
+            <div class="slide">
+                <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-6 md:p-10 shadow-2xl space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+                        <span class="text-xs uppercase tracking-widest text-indigo-400 font-bold">Slide 03</span>
+                        <span class="bg-amber-500/10 text-amber-400 text-xs px-3 py-1 rounded-full font-semibold border border-amber-500/20">Pondasi Awal</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white">KPVP: Kalimat Pernyataan Visi Penelitian</h2>
+                    
+                    <div class="bg-amber-500/10 border-l-4 border-amber-500 p-4 rounded-r-lg">
+                        <p class="text-amber-200 font-semibold text-sm md:text-base">
+                            "Don't Start at the Beginning" — Mulailah dari inti persoalan. Tanpa KPVP, penulisan artikel ilmiah berisiko tidak tuntas!
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700 space-y-3">
+                            <span class="bg-indigo-600 text-white text-xs px-2.5 py-1 rounded font-bold">Pola 1</span>
+                            <h3 class="text-base font-bold text-slate-100">Objek Material + Objek Formal + Konteks + Metode</h3>
+                            <div class="bg-slate-800 p-3 rounded-lg border border-slate-700 text-xs md:text-sm text-slate-300">
+                                <strong class="text-indigo-400">Contoh:</strong> "Ekosistem Halal sebagai Konstruksi Sosial di Indonesia: Studi Literatur Sistematis"
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700 space-y-3">
+                            <span class="bg-indigo-600 text-white text-xs px-2.5 py-1 rounded font-bold">Pola 2 (SPAM)</span>
+                            <h3 class="text-base font-bold text-slate-100">Subjek Solved + Problem + Area of Study + Method</h3>
+                            <div class="bg-slate-800 p-3 rounded-lg border border-slate-700 text-xs md:text-sm text-slate-300">
+                                <strong class="text-indigo-400">Contoh:</strong> "Manajemen Aktivitas untuk Solusi Prokrastinasi Akademik...: Studi Literatur Sistematis"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 4 -->
+            <div class="slide">
+                <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-6 md:p-10 shadow-2xl space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+                        <span class="text-xs uppercase tracking-widest text-indigo-400 font-bold">Slide 04</span>
+                        <span class="bg-indigo-500/10 text-indigo-400 text-xs px-3 py-1 rounded-full font-semibold border border-indigo-500/20">Peta Alur</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white">Tahapan Menulis Artikel Ilmiah (1–11)</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Box Proposal -->
+                        <div class="bg-slate-900/70 p-5 rounded-xl border border-indigo-500/30 space-y-3">
+                            <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+                                <h3 class="font-bold text-indigo-400 text-base">Tahap 1–6: Pendahuluan</h3>
+                                <span class="bg-indigo-500 text-white text-xs px-2 py-0.5 rounded font-semibold">50% Perjalanan (Proposal)</span>
+                            </div>
+                            <ol class="text-xs md:text-sm space-y-2 text-slate-300 list-decimal list-inside">
+                                <li><strong class="text-white">Formula Penelitian</strong> (KPVP)</li>
+                                <li><strong class="text-white">Hasil Penelitian Terdahulu</strong> (Literatur)</li>
+                                <li><strong class="text-white">Kerangka Berpikir</strong> (Miniatur/Alur)</li>
+                                <li><strong class="text-white">Metode Penelitian</strong> (Skenario)</li>
+                                <li><strong class="text-white">Landasan Teoritis</strong> (Tinjauan Pustaka)</li>
+                                <li><strong class="text-white">Latar Belakang Penelitian</strong> (Gap & Highlight)</li>
+                            </ol>
+                        </div>
+
+                        <!-- Box Pembahasan -->
+                        <div class="bg-slate-900/70 p-5 rounded-xl border border-emerald-500/30 space-y-3">
+                            <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+                                <h3 class="font-bold text-emerald-400 text-base">Tahap 7–11: Hasil & Finalisasi</h3>
+                                <span class="bg-emerald-600 text-white text-xs px-2 py-0.5 rounded font-semibold">50% Pelaksanaan</span>
+                            </div>
+                            <ol start="7" class="text-xs md:text-sm space-y-2 text-slate-300 list-decimal list-inside">
+                                <li><strong class="text-white">Hasil Penelitian (1)</strong> — Atas / Temuan</li>
+                                <li><strong class="text-white">Pembahasan (2)</strong> — Tengah / Analisis Teori</li>
+                                <li><strong class="text-white">Pembahasan (3)</strong> — Bawah / Novelty & Komparasi</li>
+                                <li><strong class="text-white">Kesimpulan</strong> — Natijah & Rekomendasi</li>
+                                <li><strong class="text-white">Abstrak & Kata Kunci</strong> — Rangkuman Akhir</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 5 -->
+            <div class="slide">
+                <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-6 md:p-10 shadow-2xl space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+                        <span class="text-xs uppercase tracking-widest text-indigo-400 font-bold">Slide 05</span>
+                        <span class="bg-indigo-500/10 text-indigo-400 text-xs px-3 py-1 rounded-full font-semibold border border-indigo-500/20">Tahap 1 & 2</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white">Formula Penelitian & Penelitian Terdahulu</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="bg-slate-900/60 p-4 md:p-5 rounded-xl border border-slate-700 space-y-2">
+                            <h3 class="text-indigo-300 font-bold text-base flex items-center gap-2">
+                                <i class="fa-solid fa-flask"></i> Tahap 1: Formula Penelitian
+                            </h3>
+                            <ul class="text-xs md:text-sm text-slate-300 space-y-1.5 list-disc list-inside">
+                                <li>Copy-Paste KPVP menjadi Topik Penelitian.</li>
+                                <li>Komponen: Permasalahan Utama, Rumusan Masalah, Tujuan, Manfaat (Teoritis & Praktis).</li>
+                                <li><strong>Instruksi:</strong> Awali kata dengan <em>"terdapat"</em>, <em>"bagaimana"</em>, atau <em>"membahas"</em>.</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-slate-900/60 p-4 md:p-5 rounded-xl border border-slate-700 space-y-2">
+                            <h3 class="text-indigo-300 font-bold text-base flex items-center gap-2">
+                                <i class="fa-solid fa-magnifying-glass font-bold"></i> Tahap 2: Penelitian Terdahulu
+                            </h3>
+                            <ul class="text-xs md:text-sm text-slate-300 space-y-1.5 list-disc list-inside">
+                                <li>Cari di <strong>Google Scholar</strong>, ambil abstrak riset relevan.</li>
+                                <li>Bandingkan <strong>Persamaan & Perbedaan</strong> dengan riset sekarang.</li>
+                                <li><strong>Standar Jenjang:</strong> S1 (min. 1 judul), S2 (min. 2 judul), S3 (min. 3 judul).</li>
+                                <li>Gunakan reference manager seperti <strong>Mendeley</strong>.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 6 -->
+            <div class="slide">
+                <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-6 md:p-10 shadow-2xl space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+                        <span class="text-xs uppercase tracking-widest text-indigo-400 font-bold">Slide 06</span>
+                        <span class="bg-indigo-500/10 text-indigo-400 text-xs px-3 py-1 rounded-full font-semibold border border-indigo-500/20">Tahap 3 & 4</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white">Kerangka Berpikir & Metode Penelitian</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700 space-y-2">
+                            <h3 class="text-amber-400 font-bold text-base flex items-center gap-2">
+                                <i class="fa-solid fa-sitemap"></i> Tahap 3: Kerangka Berpikir
+                            </h3>
+                            <p class="text-xs text-slate-400">Alur logis penelitian (ibarat miniatur rumah / rancangan arsitektur).</p>
+                            <ul class="text-xs md:text-sm text-slate-300 space-y-1 list-disc list-inside">
+                                <li>Menghubungkan teori/konsep/variabel dari KPVP.</li>
+                                <li>Dapat menggunakan visualisasi seperti <strong>Fishbone Diagram</strong>.</li>
+                                <li><strong>Hasil Akhir:</strong> Asumsi (Kualitatif) atau Hipotesis (Kuantitatif).</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700 space-y-2">
+                            <h3 class="text-emerald-400 font-bold text-base flex items-center gap-2">
+                                <i class="fa-solid fa-clapperboard"></i> Tahap 4: Metode Penelitian
+                            </h3>
+                            <p class="text-xs text-slate-400">Skenario pelaksanaan penelitian (ibarat skenario film).</p>
+                            <ul class="text-xs md:text-sm text-slate-300 space-y-1 list-disc list-inside">
+                                <li>Pendekatan & Metode Riset.</li>
+                                <li>Jenis Data & Sumber Data.</li>
+                                <li>Teknik Pengumpulan & Analisis Data.</li>
+                                <li>Rumus Statistik (eksperimen) / Waktu & Tempat (lapangan).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 7 -->
+            <div class="slide">
+                <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-6 md:p-10 shadow-2xl space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+                        <span class="text-xs uppercase tracking-widest text-indigo-400 font-bold">Slide 07</span>
+                        <span class="bg-indigo-500/10 text-indigo-400 text-xs px-3 py-1 rounded-full font-semibold border border-indigo-500/20">Tahap 5 & 6</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white">Landasan Teoritis & Latar Belakang</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700 space-y-2">
+                            <h3 class="text-indigo-300 font-bold text-base flex items-center gap-2">
+                                <i class="fa-solid fa-book"></i> Tahap 5: Landasan Teoritis
+                            </h3>
+                            <p class="text-xs md:text-sm text-slate-300">
+                                <strong>Literature Review / Tinjauan Pustaka:</strong> Menggunakan Teori Utama (Objek Formal) untuk membedah Objek Material.
+                            </p>
+                            <div class="bg-slate-800 p-2.5 rounded border border-slate-700 text-xs text-slate-400">
+                                Contoh: Menggunakan <em>Teori Konstruksi Sosial Peter L. Berger</em>.
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700 space-y-3">
+                            <h3 class="text-indigo-300 font-bold text-base flex items-center gap-2">
+                                <i class="fa-solid fa-pen-nib"></i> Tahap 6: Latar Belakang Penelitian
+                            </h3>
+                            <div class="space-y-1.5 text-xs md:text-sm">
+                                <div class="bg-slate-800 p-2 rounded border-l-2 border-indigo-400">
+                                    <strong class="text-white">1. Highlight (Sorotan):</strong> Fakta/isu penting awal.
+                                </div>
+                                <div class="bg-slate-800 p-2 rounded border-l-2 border-amber-400">
+                                    <strong class="text-white">2. Kata "Namun" (Gap):</strong> Menjelaskan celah masalah/riset.
+                                </div>
+                                <div class="bg-slate-800 p-2 rounded border-l-2 border-emerald-400">
+                                    <strong class="text-white">3. "Oleh karena itu":</strong> Keurgensian riset dilakukan.
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-400">To the point (cukup 1-2 paragraf) & diperkuat banyak sitasi (min 3 referensi).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 8 -->
+            <div class="slide">
+                <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-6 md:p-10 shadow-2xl space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+                        <span class="text-xs uppercase tracking-widest text-indigo-400 font-bold">Slide 08</span>
+                        <span class="bg-purple-500/10 text-purple-400 text-xs px-3 py-1 rounded-full font-semibold border border-purple-500/20">Inti Artikel</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white">Tahap 7–9: Hasil & Pembahasan</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-2">
+                            <span class="bg-indigo-600 text-white text-xs px-2 py-0.5 rounded font-bold">Tahap 7</span>
+                            <h3 class="font-bold text-white text-sm">Hasil (Results) / Atas</h3>
+                            <p class="text-xs text-slate-400">Penyajian data bersih (tabel, statistik, atau deskripsi teori utama). Ibarat olahan hasil penggilingan.</p>
+                        </div>
+
+                        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-2">
+                            <span class="bg-indigo-600 text-white text-xs px-2 py-0.5 rounded font-bold">Tahap 8</span>
+                            <h3 class="font-bold text-white text-sm">Pembahasan (Discussion 1) / Tengah</h3>
+                            <p class="text-xs text-slate-400">Analisis data dengan teori (Tahap 5). Menampilkan wawancara / temuan empiris studi lapangan.</p>
+                        </div>
+
+                        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-2">
+                            <span class="bg-indigo-600 text-white text-xs px-2 py-0.5 rounded font-bold">Tahap 9</span>
+                            <h3 class="font-bold text-white text-sm">Pembahasan (Discussion 2) / Bawah</h3>
+                            <p class="text-xs text-slate-400">Membandingkan temuan dengan penelitian terdahulu (Tahap 2). Tawarkan Novelty & Orisinalitas gagasan baru.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/40 p-3 rounded-lg border border-slate-700 text-xs text-slate-300">
+                        <strong>Perbedaan Pendekatan:</strong><br>
+                        • <strong>Kualitatif:</strong> Disusun seperti makalah tiga sub-bab (Tahap 7 = Kepala, Tahap 8 = Badan, Tahap 9 = Kaki).<br>
+                        • <strong>Kuantitatif:</strong> Hasil/Tabel → Uji Hipotesis → Diskusi (panggil Tahap 6 dan bandingkan dengan Tahap 2).
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 9 -->
+            <div class="slide">
+                <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-6 md:p-10 shadow-2xl space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+                        <span class="text-xs uppercase tracking-widest text-indigo-400 font-bold">Slide 09</span>
+                        <span class="bg-indigo-500/10 text-indigo-400 text-xs px-3 py-1 rounded-full font-semibold border border-indigo-500/20">Tahap 10 & 11</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white">Kesimpulan, Abstrak & Kata Kunci</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700 space-y-2">
+                            <h3 class="text-emerald-400 font-bold text-base flex items-center gap-2">
+                                <i class="fa-solid fa-flag-checkered"></i> Tahap 10: Kesimpulan
+                            </h3>
+                            <ul class="text-xs md:text-sm text-slate-300 space-y-1.5 list-disc list-inside">
+                                <li>Bukan sekadar pengulangan pembahasan.</li>
+                                <li><strong>Komponen:</strong> Hasil akhir (natijah), manfaat (janji Tahap 1), keterbatasan riset, dan rekomendasi.</li>
+                                <li><strong class="text-rose-400">Aturan Mutlak:</strong> Tanpa Kutipan / Sitasi!</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700 space-y-2">
+                            <h3 class="text-indigo-300 font-bold text-base flex items-center gap-2">
+                                <i class="fa-solid fa-file-lines"></i> Tahap 11: Abstrak & Kata Kunci
+                            </h3>
+                            <ul class="text-xs md:text-sm text-slate-300 space-y-1.5 list-disc list-inside">
+                                <li><strong>Abstrak:</strong> Rangkuman Tujuan, Metode, Objek, Hasil & Kesimpulan. (Maksimal 250 kata).</li>
+                                <li><strong>Kata Kunci:</strong> 3 – 5 kata kunci, disusun wajib sesuai <strong class="text-indigo-400">Urutan Alfabet</strong>.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 10 -->
+            <div class="slide">
+                <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-6 md:p-10 shadow-2xl space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+                        <span class="text-xs uppercase tracking-widest text-indigo-400 font-bold">Slide 10</span>
+                        <span class="bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1 rounded-full font-semibold border border-emerald-500/20">Studi Kasus</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white">Contoh Artikel Ilmiah Hasil Latihan</h2>
+                    
+                    <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-700 space-y-4">
+                        <div class="border-b border-slate-700 pb-3">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Judul Artikel Contoh:</span>
+                            <h3 class="text-lg md:text-xl font-bold text-indigo-300 mt-1">
+                                "Gagasan Islam Moderat dalam Ruang Media untuk Konstruksi Sosial Moderasi Beragama di Indonesia"
+                            </h3>
+                        </div>
+
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                            <div class="bg-slate-800 p-2 rounded text-slate-300">✓ Abstract & Keywords</div>
+                            <div class="bg-slate-800 p-2 rounded text-slate-300">✓ Pendahuluan</div>
+                            <div class="bg-slate-800 p-2 rounded text-slate-300">✓ Metode Penelitian</div>
+                            <div class="bg-slate-800 p-2 rounded text-slate-300">✓ Hasil & Pembahasan</div>
+                        </div>
+
+                        <div class="bg-emerald-950/40 border border-emerald-500/30 p-3 rounded-lg flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-award text-emerald-400 text-lg"></i>
+                                <span class="text-xs md:text-sm text-emerald-200 font-medium">Terbit di: <strong>Jurnal Khazanah Sosial Vol. 4 No. 4 (2022)</strong></span>
+                            </div>
+                            <span class="bg-emerald-600 text-white text-xs px-3 py-1 rounded-full font-bold">Terakreditasi SINTA 2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 11 -->
+            <div class="slide">
+                <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-6 md:p-10 shadow-2xl space-y-6 text-center">
+                    <div class="flex items-center justify-between border-b border-slate-700 pb-3 text-left">
+                        <span class="text-xs uppercase tracking-widest text-indigo-400 font-bold">Slide 11</span>
+                        <span class="bg-indigo-500/10 text-indigo-400 text-xs px-3 py-1 rounded-full font-semibold border border-indigo-500/20">Rangkuman</span>
+                    </div>
+                    
+                    <h2 class="text-2xl md:text-4xl font-extrabold text-white">Penutup & Kesimpulan Utama</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700 space-y-2">
+                            <i class="fa-solid fa-graduation-cap text-indigo-400 text-2xl"></i>
+                            <h3 class="font-bold text-white text-base">Kuasai Tahap 1–6</h3>
+                            <p class="text-xs md:text-sm text-slate-300">Anda mahir menyusun proposal penelitian berstandar tinggi (Skripsi, Tesis, maupun Disertasi).</p>
+                        </div>
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700 space-y-2">
+                            <i class="fa-solid fa-certificate text-emerald-400 text-2xl"></i>
+                            <h3 class="font-bold text-white text-base">Kuasai Tahap 7–11</h3>
+                            <p class="text-xs md:text-sm text-slate-300">Anda mahir menulis artikel ilmiah berkualitas standar jurnal nasional bereputasi (Sinta 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-700/60">
+                        <p class="text-lg md:text-xl font-bold text-indigo-300">"Menulis adalah keterampilan (skill) yang terus bertumbuh melalui latihan berulang."</p>
+                        <p class="text-sm text-slate-400 mt-2">Mulailah dari sekarang untuk mengerjakan tahapan menulis. Selamat berlatih!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 12 -->
+            <div class="slide">
+                <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-6 md:p-10 shadow-2xl space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+                        <span class="text-xs uppercase tracking-widest text-indigo-400 font-bold">Slide 12</span>
+                        <span class="bg-slate-700 text-slate-300 text-xs px-3 py-1 rounded-full font-semibold">Referensi & Referensi</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white">Lampiran & Glosarium</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700 space-y-3">
+                            <h3 class="text-indigo-300 font-bold text-base flex items-center gap-2">
+                                <i class="fa-solid fa-link"></i> Template Jurnal Ilmiah
+                            </h3>
+                            <ul class="text-xs md:text-sm text-slate-300 space-y-2">
+                                <li class="bg-slate-800 p-2 rounded">1. Jurnal Penelitian Ilmu Ushuluddin (JPIU)</li>
+                                <li class="bg-slate-800 p-2 rounded">2. Jurnal Riset Agama (JRA)</li>
+                            </ul>
+                            <a href="https://journal.uinsgd.ac.id/index.php/jpiu" target="_blank" class="inline-flex items-center gap-2 text-xs text-indigo-400 hover:underline pt-1">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> https://journal.uinsgd.ac.id/index.php/jpiu
+                            </a>
+                        </div>
+
+                        <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-700 space-y-2">
+                            <h3 class="text-indigo-300 font-bold text-base flex items-center gap-2">
+                                <i class="fa-solid fa-book-bookmark"></i> Glosarium
+                            </h3>
+                            <dl class="text-xs md:text-sm text-slate-300 space-y-1.5">
+                                <div><dt class="font-bold text-white inline">KPVP:</dt> <dd class="inline">Kalimat Pernyataan Visi Penelitian</dd></div>
+                                <div><dt class="font-bold text-white inline">IMRAD:</dt> <dd class="inline">Introduction, Method, Results, And Discussion</dd></div>
+                                <div><dt class="font-bold text-white inline">SINTA:</dt> <dd class="inline">Science and Technology Index</dd></div>
+                                <div><dt class="font-bold text-white inline">DOI:</dt> <dd class="inline">Digital Object Identifier</dd></div>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Slide Overview Modal Grid -->
+    <div id="overview-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden flex-col p-6 overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-white">Overview Semua Slide</h3>
+            <button onclick="toggleOverview()" class="text-slate-400 hover:text-white text-2xl font-bold px-3 py-1">
+                &times;
+            </button>
+        </div>
+        <div id="overview-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <!-- Dynamically populated -->
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <footer class="bg-slate-800/80 backdrop-blur-md border-t border-slate-700/60 px-6 py-3 flex justify-between items-center z-20">
+        <button id="prev-btn" onclick="prevSlide()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 disabled:opacity-40 disabled:hover:bg-slate-700 text-white rounded-lg text-sm font-semibold transition flex items-center gap-2">
+            <i class="fa-solid fa-chevron-left"></i> Sebelumnya
+        </button>
+        <span class="text-xs text-slate-400 hidden md:inline">Gunakan tombol panah ⬅️ ➡️ pada keyboard untuk berpindah slide</span>
+        <button id="next-btn" onclick="nextSlide()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:hover:bg-indigo-600 text-white rounded-lg text-sm font-semibold transition flex items-center gap-2">
+            Selanjutnya <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </footer>
+
+    <!-- JavaScript Controller -->
+    <script>
+        let currentSlide = 1;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                if (index === currentSlide - 1) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            document.getElementById('current-slide').textContent = currentSlide;
+            document.getElementById('progress-bar').style.width = `${(currentSlide / totalSlides) * 100}%`;
+
+            document.getElementById('prev-btn').disabled = currentSlide === 1;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        function goToSlide(slideNum) {
+            currentSlide = slideNum;
+            updateSlide();
+            toggleOverview();
+        }
+
+        function toggleOverview() {
+            const modal = document.getElementById('overview-modal');
+            const grid = document.getElementById('overview-grid');
+
+            if (modal.classList.contains('hidden')) {
+                grid.innerHTML = '';
+                slides.forEach((slide, idx) => {
+                    const slideTitle = slide.querySelector('h1, h2')?.textContent || `Slide ${idx + 1}`;
+                    const card = document.createElement('div');
+                    card.className = `p-4 rounded-xl border cursor-pointer transition flex flex-col justify-between ${
+                        idx + 1 === currentSlide 
+                        ? 'bg-indigo-900/60 border-indigo-500 text-white' 
+                        : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-300'
+                    }`;
+                    card.innerHTML = `
+                        <span class="text-xs font-bold text-indigo-400 mb-2">Slide ${idx + 1}</span>
+                        <p class="text-xs font-semibold line-clamp-2">${slideTitle}</p>
+                    `;
+                    card.onclick = () => goToSlide(idx + 1);
+                    grid.appendChild(card);
+                });
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'Escape') {
+                const modal = document.getElementById('overview-modal');
+                if (!modal.classList.contains('hidden')) {
+                    toggleOverview();
+                }
+            }
+        });
+
+        // Initialize
+        updateSlide();
+    </script>
+</body>
+</html>
